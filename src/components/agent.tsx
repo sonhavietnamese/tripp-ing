@@ -9,7 +9,7 @@ export default function Agent() {
   const cameraRef = useRef<THREE.OrthographicCamera>(null!)
   const characterRef = useRef<THREE.Group>(null!)
   const directionalLight = useRef<THREE.DirectionalLight>(null!)
-  const { target } = useFloorStore()
+  const { target, setAgentPosition } = useFloorStore()
 
   const tempVector = useRef(new THREE.Vector3())
   const currentQuaternion = useRef(new THREE.Quaternion())
@@ -84,6 +84,9 @@ export default function Agent() {
         characterRef.current.position.copy(target)
       }
     }
+
+    // Publish current character position to the store
+    setAgentPosition(characterRef.current.position.clone())
 
     const distanceToTarget = characterRef.current.position.distanceTo(target)
     if (distanceToTarget < 0.1) {
