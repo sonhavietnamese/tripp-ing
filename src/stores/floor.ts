@@ -39,6 +39,11 @@ interface FloorStore {
   showPerfection: boolean
   setShowPerfection: (v: boolean) => void
 
+  /* ---------------- Score ---------------- */
+  score: number
+  setScore: (n: number) => void
+  addScore: (d: number) => void
+
   /* FX / animation flags */
   isAttacking: boolean
   showPlayerAttackFX: boolean
@@ -113,6 +118,12 @@ export const useFloorStore = create<FloorStore>((set, get) => ({
       showCool: k === 'cool',
     }),
 
+  /* ---------------- Score defaults & helpers ---------------- */
+  score: 0,
+  setScore: (n) => set({ score: Math.max(0, Math.min(3, n)) }),
+  addScore: (d) =>
+    set((s) => ({ score: Math.max(0, Math.min(3, s.score + d)) })),
+
   /* ---------------- Progression defaults ---------------- */
   bossDefeated: false,
 
@@ -134,8 +145,13 @@ export const useFloorStore = create<FloorStore>((set, get) => ({
       return { bossHP: newBossHP }
     })
 
+    // gain score for attacking
+    get().addScore(1)
+
     // Check boss death
     if (get().bossHP <= 0) {
+      // full score on kill
+      get().setScore(3)
       set({
         bossAnimation: 'die',
         bossDefeated: true,
@@ -182,6 +198,9 @@ export const useFloorStore = create<FloorStore>((set, get) => ({
       trippHP: s.trippMaxHP,
       trippDamage: 10,
     }))
+
+    // gain score for drinking coke
+    get().addScore(1)
 
     // finish
     set({ controlLocked: false, showGuideCoke: false })
