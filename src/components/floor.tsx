@@ -76,7 +76,7 @@ export default function Floor() {
 
       {showIndicator && (
         <mesh ref={indicatorRef} position={[target.x, 0.02, target.z]} rotation={[THREE.MathUtils.degToRad(-90), 0, 0]}>
-          <planeGeometry args={[1.2, 1.2]} />
+          <planeGeometry args={[1, 1]} />
           <meshBasicMaterial map={indicatorTexture} transparent opacity={indicatorOpacity} depthWrite={false} />
         </mesh>
       )}

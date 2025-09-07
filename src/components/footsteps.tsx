@@ -49,7 +49,7 @@ export default function Footsteps() {
   const maxFootprints = 40
   const stepLength = 0.6
   const footSeparation = 0.3
-  const lifetime = 3.0
+  const lifetime = 1.0
 
   useFrame((state) => {
     setNow(state.clock.elapsedTime)
