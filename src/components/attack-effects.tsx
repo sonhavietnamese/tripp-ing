@@ -3,6 +3,7 @@ import { useFrame } from '@react-three/fiber'
 import { useRef } from 'react'
 import * as THREE from 'three'
 import { useFloorStore } from '@/stores/floor'
+import { GAME_CONFIG } from '@/config/game'
 
 export default function AttackEffects() {
   const { showPlayerAttackFX, showBossAttackFX, agentPosition } = useFloorStore()
@@ -15,12 +16,15 @@ export default function AttackEffects() {
     if (bossFxRef.current) bossFxRef.current.rotation.z -= delta * 4
   })
 
-  const BOSS_POS = new THREE.Vector3(5, 2.8, -10)
-
   return (
     <>
       {showPlayerAttackFX && (
-        <Billboard position={[BOSS_POS.x, BOSS_POS.y, BOSS_POS.z]}>
+        <Billboard
+          position={[
+            GAME_CONFIG.positions.boss.x,
+            GAME_CONFIG.bossEffects.hitBillboardY,
+            GAME_CONFIG.positions.boss.z,
+          ]}>
           <mesh ref={playerFxRef}>
             <ringGeometry args={[0.15, 0.45, 32]} />
             <meshBasicMaterial color={'#ffd54f'} transparent opacity={0.9} />

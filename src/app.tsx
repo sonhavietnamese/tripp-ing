@@ -10,6 +10,7 @@ import Hud from './components/hud/hud'
 import { VendingMachine } from './components/vending-machine'
 import * as THREE from 'three'
 import BossV2 from './components/boss-v2'
+import { GAME_CONFIG } from '@/config/game'
 import { useFloorStore } from '@/stores/floor'
 import AttackEffects from './components/attack-effects'
 
@@ -53,8 +54,15 @@ function Experience() {
       <Footsteps />
       <AttackEffects />
 
-      <VendingMachine position={[-10, 0, -4]} rotation={[0, THREE.MathUtils.degToRad(90), 0]} />
-      <BossV2 position={[5, 2, -10]} rotation={[0, THREE.MathUtils.degToRad(0), 0]} animation={bossAnimation} />
+      <VendingMachine
+        position={GAME_CONFIG.positions.vending.toArray()}
+        rotation={[0, THREE.MathUtils.degToRad(GAME_CONFIG.scene.vendingRotationYDeg), 0]}
+      />
+      <BossV2
+        position={GAME_CONFIG.scene.bossModelPosition.toArray()}
+        rotation={[0, THREE.MathUtils.degToRad(GAME_CONFIG.scene.bossRotationYDeg), 0]}
+        animation={bossAnimation}
+      />
     </>
   )
 }

@@ -9,7 +9,7 @@ export default function Floor() {
 
   // Destructure controlLocked to gate clicks when movement is locked
   // Also pull showGuideCoke flag to conditionally render the vending-machine hint
-  const { target, setTarget, agentPosition, controlLocked, showGuideCoke } = useFloorStore()
+  const { target, setTarget, agentPosition, controlLocked } = useFloorStore()
 
   const texture = useTexture('/textures/paper.jpg')
   texture.wrapS = THREE.RepeatWrapping
@@ -74,16 +74,10 @@ export default function Floor() {
         <meshStandardMaterial map={guideBossTexture} transparent alphaTest={0.5} />
       </mesh>
 
-      {showGuideCoke && (
-        <mesh
-          receiveShadow
-          position={[-5, 0.1, -7]}
-          rotation={[THREE.MathUtils.degToRad(-90), 0, THREE.MathUtils.degToRad(20)]}
-          scale={7}>
-          <planeGeometry args={[1, 1]} />
-          <meshStandardMaterial map={guideCokeTexture} transparent alphaTest={0.5} />
-        </mesh>
-      )}
+      <mesh receiveShadow position={[-5, 0.1, -7]} rotation={[THREE.MathUtils.degToRad(-90), 0, THREE.MathUtils.degToRad(20)]} scale={7}>
+        <planeGeometry args={[1, 1]} />
+        <meshStandardMaterial map={guideCokeTexture} transparent alphaTest={0.5} />
+      </mesh>
 
       {showIndicator && (
         <mesh ref={indicatorRef} position={[target.x, 0.02, target.z]} rotation={[THREE.MathUtils.degToRad(-90), 0, 0]}>
