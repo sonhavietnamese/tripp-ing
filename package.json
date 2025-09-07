@@ -23,6 +23,7 @@
     "pako": "^2.1.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
+    "react-qr-code": "^2.0.18",
     "recast-navigation": "^0.41.0",
     "tailwindcss": "^4.1.12",
     "three": "^0.179.1",

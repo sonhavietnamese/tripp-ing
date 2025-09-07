@@ -26,4 +26,9 @@ export const GAME_CONFIG = {
     bossRotationYDeg: 0,
     vendingRotationYDeg: 90,
   },
+
+  /* ---------------- Promotion / reward ---------------- */
+  promo: {
+    winCode: 'COKE-POWER-UP',
+  },
 } as const

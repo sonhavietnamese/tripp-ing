@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import * as THREE from 'three'
+import { GAME_CONFIG } from '@/config/game'
 
 interface FloorStore {
   target: THREE.Vector3
@@ -68,6 +69,12 @@ interface FloorStore {
 
   /* ---------------- Overall progression ---------------- */
   bossDefeated: boolean
+
+  /* ---------------- Win modal ---------------- */
+  showWinModal: boolean
+  setShowWinModal: (v: boolean) => void
+  winCode: string
+  setWinCode: (s: string) => void
 }
 export const useFloorStore = create<FloorStore>((set, get) => ({
   target: new THREE.Vector3(0, 0, 0),
@@ -135,6 +142,12 @@ export const useFloorStore = create<FloorStore>((set, get) => ({
   /* ---------------- Progression defaults ---------------- */
   bossDefeated: false,
 
+  /* ---------------- Win modal defaults ---------------- */
+  showWinModal: false,
+  setShowWinModal: (v) => set({ showWinModal: v }),
+  winCode: GAME_CONFIG.promo.winCode,
+  setWinCode: (s) => set({ winCode: s }),
+
   /* -------- Async attack sequence -------- */
   performAttackSequence: async () => {
     const { isAttacking } = get()
@@ -169,7 +182,12 @@ export const useFloorStore = create<FloorStore>((set, get) => ({
         isAttacking: false,
         controlLocked: false,
         showGuideCoke: true,
+        showWinModal: true,
       })
+      // ensure winCode populated (in case it was cleared)
+      if (!get().winCode) {
+        set({ winCode: GAME_CONFIG.promo.winCode })
+      }
       get().setEmote('cool')
       return
     }

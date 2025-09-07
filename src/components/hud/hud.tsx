@@ -1,4 +1,5 @@
 import { useFloorStore } from '@/stores/floor'
+import QRCode from 'react-qr-code'
 
 export default function Hud() {
   const {
@@ -12,6 +13,9 @@ export default function Hud() {
     showBuyCokeButton,
     performBuyCoke,
     score,
+    showWinModal,
+    setShowWinModal,
+    winCode,
   } = useFloorStore()
 
   const slots = [0, 1, 2]
@@ -30,6 +34,25 @@ export default function Hud() {
           ))}
         </ul>
       </aside>
+
+      {/* Win Modal */}
+      {showWinModal && (
+        <div className='absolute inset-0 bg-black/60 flex items-center justify-center pointer-events-auto z-20'>
+          <div className='bg-white rounded-lg p-6 max-w-sm text-center shadow-xl flex flex-col items-center gap-4'>
+            <h2 className='text-xl font-bold text-emerald-700'>Coke Power up!</h2>
+            <p className='text-sm text-gray-700'>
+              Here&#39;s your code, let&#39;s go pick one in your nearest store
+            </p>
+            <QRCode value={winCode} size={128} />
+            <code className='font-mono text-sm'>{winCode}</code>
+            <button
+              className='mt-2 px-4 py-2 bg-emerald-600 text-white rounded-md shadow'
+              onClick={() => setShowWinModal(false)}>
+              Close
+            </button>
+          </div>
+        </div>
+      )}
 
       {showAttackButton && (
         <div className='absolute bottom-4 right-4 pointer-events-none'>
