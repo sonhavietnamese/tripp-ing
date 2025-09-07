@@ -7,7 +7,9 @@ import * as THREE from 'three'
 export default function Floor() {
   const ref = useRef<THREE.Mesh>(null!)
 
-  const { target, setTarget, agentPosition } = useFloorStore()
+  // Destructure controlLocked to gate clicks when movement is locked
+  // Also pull showGuideCoke flag to conditionally render the vending-machine hint
+  const { target, setTarget, agentPosition, controlLocked } = useFloorStore()
 
   const texture = useTexture('/textures/paper.jpg')
   texture.wrapS = THREE.RepeatWrapping
@@ -20,6 +22,9 @@ export default function Floor() {
   const indicatorRef = useRef<THREE.Mesh>(null!)
 
   const handleClick = (e: ThreeEvent<MouseEvent>) => {
+    // Ignore clicks while player control is locked
+    if (controlLocked) return
+
     const { x, z } = e.point
     setTarget(new THREE.Vector3(x, 0, z))
     setShowIndicator(true)
