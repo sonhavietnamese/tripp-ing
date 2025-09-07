@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { saigon } from 'viem/chains'
 import { createConfig, http, WagmiProvider } from 'wagmi'
 import Agent from './components/agent'
+import Footsteps from './components/footsteps'
 import Floor from './components/floor'
 import Hud from './components/hud/hud'
 import { VendingMachine } from './components/vending-machine'
@@ -44,6 +45,8 @@ function Experience() {
       <Floor />
 
       <Agent />
+
+      <Footsteps />
 
       <VendingMachine position={[-10, 0, -4]} rotation={[0, THREE.MathUtils.degToRad(90), 0]} />
       <Boss position={[5, 0, -10]} rotation={[0, THREE.MathUtils.degToRad(0), 0]} />
