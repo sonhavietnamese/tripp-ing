@@ -21,6 +21,14 @@ export default function Agent() {
   const lightOffset = new THREE.Vector3(5, 20, 5) // Different offset for the light
   const cameraDeadzone = 0.5
 
+  /* ------------------------------------------------------------------ */
+  /* Combat engagement / auto-move constants                            */
+  /* ------------------------------------------------------------------ */
+  const BOSS_POSITION = useRef(new THREE.Vector3(5, 0, -10)) // must match Boss placement
+  const AUTO_ENGAGE_RANGE = 5
+  const ATTACK_STANDOFF = 1.5
+  const autoEngage = useRef(false)
+
   const [status, setStatus] = useState<'idle' | 'walking'>('idle')
 
   // init position
@@ -32,6 +40,27 @@ export default function Agent() {
     if (!cameraRef.current) return
     if (!characterRef.current) return
     if (!directionalLight.current) return
+
+    const pos = characterRef.current.position
+
+    /* -------------------------------------------------------------- */
+    /* Detect boss proximity – toggle autoEngage                      */
+    /* -------------------------------------------------------------- */
+    const distToBoss = pos.distanceTo(BOSS_POSITION.current)
+    if (distToBoss < AUTO_ENGAGE_RANGE) autoEngage.current = true
+    else if (distToBoss > AUTO_ENGAGE_RANGE + 0.5) autoEngage.current = false
+
+    /* -------------------------------------------------------------- */
+    /* Determine effective target                                     */
+    /* -------------------------------------------------------------- */
+    let computedTarget = target
+    if (autoEngage.current) {
+      // vector from boss to player – we want player to stand ATTACK_STANDOFF away
+      const dir = pos.clone().sub(BOSS_POSITION.current).setY(0)
+      if (dir.lengthSq() < 1e-6) dir.set(0, 0, 1) // fallback if overlapping
+      dir.normalize()
+      computedTarget = BOSS_POSITION.current.clone().add(dir.multiplyScalar(ATTACK_STANDOFF))
+    }
 
     // Camera and light should always follow the player, regardless of target
     const desiredCameraPosition = characterRef.current.position.clone().add(cameraOffset)
@@ -51,13 +80,13 @@ export default function Agent() {
     }
 
     // Only handle movement if there's a target
-    if (!target) return
+    if (!computedTarget) return
 
-    if (target) {
+    if (computedTarget) {
       tempVector.current.set(
-        target.x - characterRef.current.position.x,
-        target.y - characterRef.current.position.y,
-        target.z - characterRef.current.position.z,
+        computedTarget.x - characterRef.current.position.x,
+        computedTarget.y - characterRef.current.position.y,
+        computedTarget.z - characterRef.current.position.z,
       )
 
       if (tempVector.current.length() > 0.01) {
@@ -65,13 +94,14 @@ export default function Agent() {
         lookAtMatrix.current.lookAt(new THREE.Vector3(0, 0, 0), tempVector.current.clone().negate(), new THREE.Vector3(0, 1, 0))
         targetQuaternion.current.setFromRotationMatrix(lookAtMatrix.current)
 
+        // Smoothly rotate towards desired heading
         currentQuaternion.current.slerp(targetQuaternion.current, 0.3)
         characterRef.current.quaternion.copy(currentQuaternion.current)
       }
     }
 
     const direction = new THREE.Vector3()
-    direction.subVectors(target, characterRef.current.position)
+    direction.subVectors(computedTarget, characterRef.current.position)
     const distance = direction.length()
 
     if (distance > 0.01) {
@@ -81,14 +111,26 @@ export default function Agent() {
       if (moveDistance < distance) {
         characterRef.current.position.add(direction.multiplyScalar(moveDistance))
       } else {
-        characterRef.current.position.copy(target)
+        characterRef.current.position.copy(computedTarget)
       }
     }
 
     // Publish current character position to the store
     setAgentPosition(characterRef.current.position.clone())
 
-    const distanceToTarget = characterRef.current.position.distanceTo(target)
+    const distanceToTarget = characterRef.current.position.distanceTo(computedTarget)
+
+    // If in autoEngage and arrived at fixed point, face boss directly
+    if (autoEngage.current && distanceToTarget < 0.1) {
+      const faceDir = BOSS_POSITION.current.clone().sub(pos).setY(0)
+      if (faceDir.lengthSq() > 1e-6) {
+        faceDir.normalize()
+        lookAtMatrix.current.lookAt(new THREE.Vector3(0, 0, 0), faceDir.clone().negate(), new THREE.Vector3(0, 1, 0))
+        targetQuaternion.current.setFromRotationMatrix(lookAtMatrix.current)
+        currentQuaternion.current.slerp(targetQuaternion.current, 0.3)
+        characterRef.current.quaternion.copy(currentQuaternion.current)
+      }
+    }
     if (distanceToTarget < 0.1) {
       setStatus('idle')
     } else {
