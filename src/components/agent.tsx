@@ -1,39 +1,33 @@
+import { GAME_CONFIG } from '@/config/game'
 import { useFloorStore } from '@/stores/floor'
-import { Billboard, OrthographicCamera, useTexture } from '@react-three/drei'
+import { Billboard, Html, OrthographicCamera } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
 import Tripp from './tripp'
-import { GAME_CONFIG } from '@/config/game'
 
 export default function Agent() {
   const cameraRef = useRef<THREE.OrthographicCamera>(null!)
   const characterRef = useRef<THREE.Group>(null!)
   const directionalLight = useRef<THREE.DirectionalLight>(null!)
-  const { 
-    target, 
-    setAgentPosition, 
-    setTarget, 
-    setControlLocked, 
-    setShowAttackButton, 
+  const {
+    target,
+    setAgentPosition,
+    setTarget,
+    setControlLocked,
+    setShowAttackButton,
     showCry,
     setShowBuyCokeButton,
     showPerfection,
     showCool,
-    bossDefeated
+    bossDefeated,
   } = useFloorStore()
 
   const tempVector = useRef(new THREE.Vector3())
   const currentQuaternion = useRef(new THREE.Quaternion())
   const targetQuaternion = useRef(new THREE.Quaternion())
   const lookAtMatrix = useRef(new THREE.Matrix4())
-
-  /* texture for cry emote */
-  const cryTexture = useTexture('/emotes/cry.webp')
-  /* texture for perfection emote */
-  const perfectionTexture = useTexture('/emotes/perfection.webp')
-  /* texture for cool emote */
-  const coolTexture = useTexture('/emotes/cool.webp')
+  const billboardRef = useRef<THREE.Group>(null!)
 
   /* ------------------------------------------------------------------ */
   /* Engagement state                                                   */
@@ -216,6 +210,8 @@ export default function Agent() {
     } else {
       setStatus('walking')
     }
+
+    billboardRef.current.position.copy(characterRef.current.position)
   })
 
   return (
@@ -238,35 +234,27 @@ export default function Agent() {
         shadow-camera-far={50}
       />
       <group ref={characterRef}>
-        <Tripp animation={status === 'idle' ? 'IDLE' : 'RUN'} />
-
+        <Tripp animation={status === 'idle' ? 'IDLE' : 'RUN'} />)
+      </group>
+      <Billboard ref={billboardRef}>
         {showCry && (
-          <Billboard position={[0, GAME_CONFIG.agent.emoteHeight, 0]}>
-            <mesh>
-              <planeGeometry args={[1.2, 1.2]} />
-              <meshBasicMaterial map={cryTexture} transparent />
-            </mesh>
-          </Billboard>
+          <Html position={[0, GAME_CONFIG.agent.emoteHeight, 0]} center transform style={{ pointerEvents: 'none' }}>
+            <img src='/emotes/cry.webp' alt='cry' style={{ width: 64, height: 64 }} />
+          </Html>
         )}
 
         {showPerfection && (
-          <Billboard position={[0, GAME_CONFIG.agent.emoteHeight, 0]}>
-            <mesh>
-              <planeGeometry args={[1.2, 1.2]} />
-              <meshBasicMaterial map={perfectionTexture} transparent />
-            </mesh>
-          </Billboard>
+          <Html position={[0, GAME_CONFIG.agent.emoteHeight, 0]} center transform style={{ pointerEvents: 'none' }}>
+            <img src='/emotes/perfection.webp' alt='perfection' style={{ width: 64, height: 64 }} />
+          </Html>
         )}
 
         {showCool && (
-          <Billboard position={[0, GAME_CONFIG.agent.emoteHeight, 0]}>
-            <mesh>
-              <planeGeometry args={[1.2, 1.2]} />
-              <meshBasicMaterial map={coolTexture} transparent />
-            </mesh>
-          </Billboard>
+          <Html position={[0, GAME_CONFIG.agent.emoteHeight, 0]} center transform style={{ pointerEvents: 'none' }}>
+            <img src='/emotes/cool.webp' alt='cool' style={{ width: 64, height: 64 }} />
+          </Html>
         )}
-      </group>
+      </Billboard>
     </>
   )
 }
