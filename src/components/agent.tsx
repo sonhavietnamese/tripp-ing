@@ -89,11 +89,17 @@ export default function Agent() {
     /* -------------------------------------------------------------- */
     /* Detect vending machine proximity for auto-engage               */
     /* -------------------------------------------------------------- */
-    const distToVM = pos.distanceTo(VENDING_POSITION.current)
-    if (!engagedThisProximityVM.current && distToVM < AUTO_ENGAGE_RANGE_VM) {
-      autoEngageActiveVM.current = true
-    }
-    if (distToVM > AUTO_ENGAGE_RANGE_VM + 0.5) {
+    if (!bossDefeated) {
+      const distToVM = pos.distanceTo(VENDING_POSITION.current)
+      if (!engagedThisProximityVM.current && distToVM < AUTO_ENGAGE_RANGE_VM) {
+        autoEngageActiveVM.current = true
+      }
+      if (distToVM > AUTO_ENGAGE_RANGE_VM + 0.5) {
+        engagedThisProximityVM.current = false
+      }
+    } else {
+      // boss is dead, disable any VM auto-engage state
+      autoEngageActiveVM.current = false
       engagedThisProximityVM.current = false
     }
 
@@ -106,7 +112,7 @@ export default function Agent() {
       computedTarget = FIXED_ATTACK_POSITION.current
       // keep store target updated so the floor indicator can fade properly
       setTarget(computedTarget.clone())
-    } else if (autoEngageActiveVM.current) {
+    } else if (autoEngageActiveVM.current && !bossDefeated) {
       // Vending machine engagement is secondary
       computedTarget = FIXED_VENDING_POSITION.current
       // keep store target updated
