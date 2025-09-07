@@ -5,7 +5,7 @@ export const GAME_CONFIG = {
     boss: new THREE.Vector3(5, 0, -10),
     bossFixedAttack: new THREE.Vector3(5, 0, -6.5),
     vending: new THREE.Vector3(-10, 0, -4),
-    vendingFixedStand: new THREE.Vector3(-12, 0, -4),
+    vendingFixedStand: new THREE.Vector3(-8.5, 0, -4),
   },
   autoEngageRange: {
     boss: 8,
