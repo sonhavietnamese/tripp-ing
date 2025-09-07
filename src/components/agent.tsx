@@ -1,5 +1,5 @@
 import { useFloorStore } from '@/stores/floor'
-import { OrthographicCamera } from '@react-three/drei'
+import { Billboard, OrthographicCamera, useTexture } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
@@ -9,13 +9,27 @@ export default function Agent() {
   const cameraRef = useRef<THREE.OrthographicCamera>(null!)
   const characterRef = useRef<THREE.Group>(null!)
   const directionalLight = useRef<THREE.DirectionalLight>(null!)
-  const { target, setAgentPosition } = useFloorStore()
+  const { 
+    target, 
+    setAgentPosition, 
+    setTarget, 
+    setControlLocked, 
+    setShowAttackButton, 
+    showCry,
+    setShowBuyCokeButton,
+    showPerfection
+  } = useFloorStore()
 
   const tempVector = useRef(new THREE.Vector3())
   const currentQuaternion = useRef(new THREE.Quaternion())
   const targetQuaternion = useRef(new THREE.Quaternion())
   const lookAtMatrix = useRef(new THREE.Matrix4())
   const movementSpeed = 7
+
+  /* texture for cry emote */
+  const cryTexture = useTexture('/emotes/cry.webp')
+  /* texture for perfection emote */
+  const perfectionTexture = useTexture('/emotes/perfection.webp')
 
   const cameraOffset = new THREE.Vector3(10, 15, 10)
   const lightOffset = new THREE.Vector3(5, 20, 5) // Different offset for the light
@@ -25,9 +39,21 @@ export default function Agent() {
   /* Combat engagement / auto-move constants                            */
   /* ------------------------------------------------------------------ */
   const BOSS_POSITION = useRef(new THREE.Vector3(5, 0, -10)) // must match Boss placement
-  const AUTO_ENGAGE_RANGE = 5
-  const ATTACK_STANDOFF = 1.5
-  const autoEngage = useRef(false)
+  const AUTO_ENGAGE_RANGE = 8
+  const FIXED_ATTACK_POSITION = useRef(new THREE.Vector3(5, 0, -6.5)) // fixed point in front of boss
+  // engagement state
+  const engagedThisProximity = useRef(false)
+  const autoEngageActive = useRef(false)
+
+  /* ------------------------------------------------------------------ */
+  /* Vending machine engagement / auto-move constants                   */
+  /* ------------------------------------------------------------------ */
+  const VENDING_POSITION = useRef(new THREE.Vector3(-10, 0, -4))
+  const FIXED_VENDING_POSITION = useRef(new THREE.Vector3(-12, 0, -4))
+  const AUTO_ENGAGE_RANGE_VM = 8
+  // vending machine engagement state
+  const engagedThisProximityVM = useRef(false)
+  const autoEngageActiveVM = useRef(false)
 
   const [status, setStatus] = useState<'idle' | 'walking'>('idle')
 
@@ -44,22 +70,41 @@ export default function Agent() {
     const pos = characterRef.current.position
 
     /* -------------------------------------------------------------- */
-    /* Detect boss proximity – toggle autoEngage                      */
+    /* Detect boss proximity – decide when to trigger one-time engage */
     /* -------------------------------------------------------------- */
     const distToBoss = pos.distanceTo(BOSS_POSITION.current)
-    if (distToBoss < AUTO_ENGAGE_RANGE) autoEngage.current = true
-    else if (distToBoss > AUTO_ENGAGE_RANGE + 0.5) autoEngage.current = false
+    if (!engagedThisProximity.current && distToBoss < AUTO_ENGAGE_RANGE) {
+      autoEngageActive.current = true
+    }
+    if (distToBoss > AUTO_ENGAGE_RANGE + 0.5) {
+      engagedThisProximity.current = false
+    }
+
+    /* -------------------------------------------------------------- */
+    /* Detect vending machine proximity for auto-engage               */
+    /* -------------------------------------------------------------- */
+    const distToVM = pos.distanceTo(VENDING_POSITION.current)
+    if (!engagedThisProximityVM.current && distToVM < AUTO_ENGAGE_RANGE_VM) {
+      autoEngageActiveVM.current = true
+    }
+    if (distToVM > AUTO_ENGAGE_RANGE_VM + 0.5) {
+      engagedThisProximityVM.current = false
+    }
 
     /* -------------------------------------------------------------- */
     /* Determine effective target                                     */
     /* -------------------------------------------------------------- */
     let computedTarget = target
-    if (autoEngage.current) {
-      // vector from boss to player – we want player to stand ATTACK_STANDOFF away
-      const dir = pos.clone().sub(BOSS_POSITION.current).setY(0)
-      if (dir.lengthSq() < 1e-6) dir.set(0, 0, 1) // fallback if overlapping
-      dir.normalize()
-      computedTarget = BOSS_POSITION.current.clone().add(dir.multiplyScalar(ATTACK_STANDOFF))
+    if (autoEngageActive.current) {
+      // Boss engagement takes priority
+      computedTarget = FIXED_ATTACK_POSITION.current
+      // keep store target updated so the floor indicator can fade properly
+      setTarget(computedTarget.clone())
+    } else if (autoEngageActiveVM.current) {
+      // Vending machine engagement is secondary
+      computedTarget = FIXED_VENDING_POSITION.current
+      // keep store target updated
+      setTarget(computedTarget.clone())
     }
 
     // Camera and light should always follow the player, regardless of target
@@ -119,9 +164,15 @@ export default function Agent() {
     setAgentPosition(characterRef.current.position.clone())
 
     const distanceToTarget = characterRef.current.position.distanceTo(computedTarget)
+    // Distance specifically to the fixed attack position
+    const distanceToFixed = characterRef.current.position.distanceTo(FIXED_ATTACK_POSITION.current)
+    // Distance specifically to the fixed vending position
+    const distanceToFixedVM = characterRef.current.position.distanceTo(FIXED_VENDING_POSITION.current)
 
-    // If in autoEngage and arrived at fixed point, face boss directly
-    if (autoEngage.current && distanceToTarget < 0.1) {
+    /* -------------------------------------------------------------- */
+    /* Handle arrival at fixed attack position                        */
+    /* -------------------------------------------------------------- */
+    if (distanceToFixed < 0.12) {
       const faceDir = BOSS_POSITION.current.clone().sub(pos).setY(0)
       if (faceDir.lengthSq() > 1e-6) {
         faceDir.normalize()
@@ -130,7 +181,38 @@ export default function Agent() {
         currentQuaternion.current.slerp(targetQuaternion.current, 0.3)
         characterRef.current.quaternion.copy(currentQuaternion.current)
       }
+      // First-time arrival actions
+      if (!engagedThisProximity.current) {
+        setShowAttackButton(true)
+        setControlLocked(true)
+        engagedThisProximity.current = true
+      }
+      // Ensure auto engage stops forcing target after arrival
+      autoEngageActive.current = false
     }
+
+    /* -------------------------------------------------------------- */
+    /* Handle arrival at fixed vending position                       */
+    /* -------------------------------------------------------------- */
+    if (distanceToFixedVM < 0.12) {
+      const faceDir = VENDING_POSITION.current.clone().sub(pos).setY(0)
+      if (faceDir.lengthSq() > 1e-6) {
+        faceDir.normalize()
+        lookAtMatrix.current.lookAt(new THREE.Vector3(0, 0, 0), faceDir.clone().negate(), new THREE.Vector3(0, 1, 0))
+        targetQuaternion.current.setFromRotationMatrix(lookAtMatrix.current)
+        currentQuaternion.current.slerp(targetQuaternion.current, 0.3)
+        characterRef.current.quaternion.copy(currentQuaternion.current)
+      }
+      // First-time arrival actions
+      if (!engagedThisProximityVM.current) {
+        setShowBuyCokeButton(true)
+        setControlLocked(true)
+        engagedThisProximityVM.current = true
+      }
+      // Ensure auto engage stops forcing target after arrival
+      autoEngageActiveVM.current = false
+    }
+
     if (distanceToTarget < 0.1) {
       setStatus('idle')
     } else {
@@ -159,6 +241,24 @@ export default function Agent() {
       />
       <group ref={characterRef}>
         <Tripp animation={status === 'idle' ? 'IDLE' : 'RUN'} />
+
+        {showCry && (
+          <Billboard position={[0, 2.4, 0]}>
+            <mesh>
+              <planeGeometry args={[1.2, 1.2]} />
+              <meshBasicMaterial map={cryTexture} transparent />
+            </mesh>
+          </Billboard>
+        )}
+
+        {showPerfection && (
+          <Billboard position={[0, 2.4, 0]}>
+            <mesh>
+              <planeGeometry args={[1.2, 1.2]} />
+              <meshBasicMaterial map={perfectionTexture} transparent />
+            </mesh>
+          </Billboard>
+        )}
       </group>
     </>
   )

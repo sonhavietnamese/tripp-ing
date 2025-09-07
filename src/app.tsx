@@ -9,7 +9,9 @@ import Floor from './components/floor'
 import Hud from './components/hud/hud'
 import { VendingMachine } from './components/vending-machine'
 import * as THREE from 'three'
-import { Boss } from './components/boss'
+import BossV2 from './components/boss-v2'
+import { useFloorStore } from '@/stores/floor'
+import AttackEffects from './components/attack-effects'
 
 const queryClient = new QueryClient()
 
@@ -38,6 +40,8 @@ export default function App() {
 }
 
 function Experience() {
+  const { bossAnimation } = useFloorStore()
+
   return (
     <>
       <ambientLight intensity={1} />
@@ -47,9 +51,10 @@ function Experience() {
       <Agent />
 
       <Footsteps />
+      <AttackEffects />
 
       <VendingMachine position={[-10, 0, -4]} rotation={[0, THREE.MathUtils.degToRad(90), 0]} />
-      <Boss position={[5, 0, -10]} rotation={[0, THREE.MathUtils.degToRad(0), 0]} />
+      <BossV2 position={[5, 2, -10]} rotation={[0, THREE.MathUtils.degToRad(0), 0]} animation={bossAnimation} />
     </>
   )
 }
