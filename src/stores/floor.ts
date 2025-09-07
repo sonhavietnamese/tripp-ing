@@ -44,6 +44,10 @@ interface FloorStore {
   setScore: (n: number) => void
   addScore: (d: number) => void
 
+  /* flags to ensure score is granted only once per action type */
+  scoredAttack: boolean
+  scoredDrink: boolean
+
   /* FX / animation flags */
   isAttacking: boolean
   showPlayerAttackFX: boolean
@@ -124,6 +128,10 @@ export const useFloorStore = create<FloorStore>((set, get) => ({
   addScore: (d) =>
     set((s) => ({ score: Math.max(0, Math.min(3, s.score + d)) })),
 
+  /* one-time score flags */
+  scoredAttack: false,
+  scoredDrink: false,
+
   /* ---------------- Progression defaults ---------------- */
   bossDefeated: false,
 
@@ -145,8 +153,11 @@ export const useFloorStore = create<FloorStore>((set, get) => ({
       return { bossHP: newBossHP }
     })
 
-    // gain score for attacking
-    get().addScore(1)
+    // gain score once for attacking
+    if (!get().scoredAttack) {
+      set({ scoredAttack: true })
+      get().addScore(1)
+    }
 
     // Check boss death
     if (get().bossHP <= 0) {
@@ -200,7 +211,10 @@ export const useFloorStore = create<FloorStore>((set, get) => ({
     }))
 
     // gain score for drinking coke
-    get().addScore(1)
+    if (!get().scoredDrink) {
+      set({ scoredDrink: true })
+      get().addScore(1)
+    }
 
     // finish
     set({ controlLocked: false, showGuideCoke: false })
