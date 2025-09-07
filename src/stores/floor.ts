@@ -54,6 +54,9 @@ interface FloorStore {
   showCool: boolean
   setShowCool: (v: boolean) => void
 
+  /* exclusive emote setter */
+  setEmote: (k: 'none' | 'cry' | 'perfection' | 'cool') => void
+
   /* ---------------- Overall progression ---------------- */
   bossDefeated: boolean
 }
@@ -102,6 +105,14 @@ export const useFloorStore = create<FloorStore>((set, get) => ({
   showCool: false,
   setShowCool: (v) => set({ showCool: v }),
 
+  /* -------- Central emote setter (mutually exclusive) -------- */
+  setEmote: (k) =>
+    set({
+      showCry: k === 'cry',
+      showPerfection: k === 'perfection',
+      showCool: k === 'cool',
+    }),
+
   /* ---------------- Progression defaults ---------------- */
   bossDefeated: false,
 
@@ -130,10 +141,9 @@ export const useFloorStore = create<FloorStore>((set, get) => ({
         bossDefeated: true,
         isAttacking: false,
         controlLocked: false,
-        showCry: false,
-        showCool: true,
         showGuideCoke: true,
       })
+      get().setEmote('cool')
       return
     }
 
@@ -151,15 +161,18 @@ export const useFloorStore = create<FloorStore>((set, get) => ({
       bossAnimation: 'idle-long',
       isAttacking: false,
       controlLocked: false,
-      showCry: true,
       showGuideCoke: true,
     })
+
+    // show cry emote (exclusive)
+    get().setEmote('cry')
   },
 
   /* -------- Async buy–drink sequence -------- */
   performBuyCoke: async () => {
     // lock controls & hide button
-    set({ controlLocked: true, showBuyCokeButton: false, showPerfection: true })
+    set({ controlLocked: true, showBuyCokeButton: false })
+    get().setEmote('perfection')
 
     // drink duration
     await new Promise((r) => setTimeout(r, 3000))
@@ -171,10 +184,7 @@ export const useFloorStore = create<FloorStore>((set, get) => ({
     }))
 
     // finish
-    set({
-      showPerfection: false,
-      controlLocked: false,
-      showGuideCoke: false,
-    })
+    set({ controlLocked: false, showGuideCoke: false })
+    get().setEmote('none')
   },
 }))
