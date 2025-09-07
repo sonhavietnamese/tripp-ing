@@ -8,8 +8,8 @@ export const GAME_CONFIG = {
     vendingFixedStand: new THREE.Vector3(-8.5, 0, -4),
   },
   autoEngageRange: {
-    boss: 8,
-    vending: 8,
+    boss: 9,
+    vending: 9,
   },
   agent: {
     movementSpeed: 7,

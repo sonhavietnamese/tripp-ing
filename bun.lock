@@ -4,7 +4,6 @@
     "": {
       "name": "web",
       "dependencies": {
-        "@esotericsoftware/spine-threejs": "^4.2.89",
         "@react-three/drei": "^10.7.4",
         "@react-three/fiber": "^9.3.0",
         "@recast-navigation/three": "^0.41.0",
@@ -16,7 +15,6 @@
         "react": "^19.1.1",
         "react-dom": "^19.1.1",
         "react-qr-code": "^2.0.18",
-        "recast-navigation": "^0.41.0",
         "tailwindcss": "^4.1.12",
         "three": "^0.179.1",
         "viem": "2.x",
@@ -170,10 +168,6 @@
     "@eslint/object-schema": ["@eslint/object-schema@2.1.6", "", {}, "sha512-RBMg5FRL0I0gs51M/guSAj5/e14VQ4tpZnQNWwuDT66P14I43ItmPfIZRhO9fUVIPOAQXU47atlywZ/czoqFPA=="],
 
     "@eslint/plugin-kit": ["@eslint/plugin-kit@0.3.5", "", { "dependencies": { "@eslint/core": "^0.15.2", "levn": "^0.4.1" } }, "sha512-Z5kJ+wU3oA7MMIqVR9tyZRtjYPr4OC004Q4Rw7pgOKUOKkJfZ3O24nz3WYfGRpMDNmcOi3TwQOmgm7B7Tpii0w=="],
-
-    "@esotericsoftware/spine-core": ["@esotericsoftware/spine-core@4.2.89", "", {}, "sha512-6OiGCW318GF7A7wZMfd2kq9SwnabHQ2kQvpQVr8QUW8oGbLn1QW/BxP5kGlnfnBm+BSfKNKoKInQL68GjJ6W7g=="],
-
-    "@esotericsoftware/spine-threejs": ["@esotericsoftware/spine-threejs@4.2.89", "", { "dependencies": { "@esotericsoftware/spine-core": "4.2.89" }, "peerDependencies": { "three": "0.162.0" } }, "sha512-vv9WuMGTyxP99UXgnvr8B5yPjfEUP42wyXMd/zPdUM999vNRg4dyq0fPdZn26j4jdj1n2q/3bm70TtkARkA5Yg=="],
 
     "@ethereumjs/common": ["@ethereumjs/common@3.2.0", "", { "dependencies": { "@ethereumjs/util": "^8.1.0", "crc-32": "^1.2.0" } }, "sha512-pksvzI0VyLgmuEF2FA/JR/4/y6hcPq8OUail3/AvycBaW1d5VSauOZzqGvJ3RTmR4MU35lWE8KseKOsEhrFRBA=="],
 
@@ -1256,8 +1250,6 @@
     "readdirp": ["readdirp@4.1.2", "", {}, "sha512-GDhwkLfywWL2s6vEjyhri+eXmfH6j1L7JE27WhqLeYzoh/A3DBaYGEj2H/HFZCn/kMfim73FXxEJTw06WtxQwg=="],
 
     "real-require": ["real-require@0.1.0", "", {}, "sha512-r/H9MzAWtrv8aSVjPCMFpDMl5q66GqtmmRkRjpHTsp4zBAa+snZyiQNlMONiUmEJcsnaw0wCauJ2GWODr/aFkg=="],
-
-    "recast-navigation": ["recast-navigation@0.41.0", "", { "dependencies": { "@recast-navigation/core": "0.41.0", "@recast-navigation/generators": "0.41.0" } }, "sha512-jx27tSobtpPbJnH8DqJSNLfSKG80+JbxP2uroelm/8wPIxmuTtLC2HZ65cDtfRgCzymg2zwjVwXxKaJM0Ohbyw=="],
 
     "require-directory": ["require-directory@2.1.1", "", {}, "sha512-fGxEI7+wsG9xrvdjsrlmL22OMTTiHRwAMroiEeMgq8gzoLC/PQr7RsRDSTLUg/bZAZtF+TVIkHc6/4RIKrui+Q=="],
 
