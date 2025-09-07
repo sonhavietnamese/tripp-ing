@@ -1,5 +1,5 @@
 import { useFloorStore } from '@/stores/floor'
-import { Html, OrthographicCamera } from '@react-three/drei'
+import { Billboard, Html, OrthographicCamera } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
@@ -10,23 +10,25 @@ export default function Agent() {
   const cameraRef = useRef<THREE.OrthographicCamera>(null!)
   const characterRef = useRef<THREE.Group>(null!)
   const directionalLight = useRef<THREE.DirectionalLight>(null!)
-  const { 
-    target, 
-    setAgentPosition, 
-    setTarget, 
-    setControlLocked, 
-    setShowAttackButton, 
+  const {
+    target,
+    setAgentPosition,
+    setTarget,
+    setControlLocked,
+    setShowAttackButton,
     showCry,
     setShowBuyCokeButton,
     showPerfection,
     showCool,
-    bossDefeated
+    bossDefeated,
   } = useFloorStore()
 
   const tempVector = useRef(new THREE.Vector3())
   const currentQuaternion = useRef(new THREE.Quaternion())
   const targetQuaternion = useRef(new THREE.Quaternion())
   const lookAtMatrix = useRef(new THREE.Matrix4())
+
+  const billboardRef = useRef<THREE.Group>(null!)
 
   /* ------------------------------------------------------------------ */
   /* Engagement state                                                   */
@@ -209,6 +211,8 @@ export default function Agent() {
     } else {
       setStatus('walking')
     }
+
+    billboardRef.current.position.copy(characterRef.current.position)
   })
 
   return (
@@ -232,40 +236,26 @@ export default function Agent() {
       />
       <group ref={characterRef}>
         <Tripp animation={status === 'idle' ? 'IDLE' : 'RUN'} />
-
+      </group>
+      <Billboard ref={billboardRef}>
         {showCry && (
-          <Html
-            position={[0, GAME_CONFIG.agent.emoteHeight, 0]}
-            center
-            distanceFactor={8}
-            transform
-            style={{ pointerEvents: 'none' }}>
+          <Html position={[0, GAME_CONFIG.agent.emoteHeight, 0]} center distanceFactor={8} transform style={{ pointerEvents: 'none' }}>
             <img src='/emotes/cry.webp' alt='cry' style={{ width: 64, height: 64 }} />
           </Html>
         )}
 
         {showPerfection && (
-          <Html
-            position={[0, GAME_CONFIG.agent.emoteHeight, 0]}
-            center
-            distanceFactor={8}
-            transform
-            style={{ pointerEvents: 'none' }}>
+          <Html position={[0, GAME_CONFIG.agent.emoteHeight, 0]} center distanceFactor={8} transform style={{ pointerEvents: 'none' }}>
             <img src='/emotes/perfection.webp' alt='perfection' style={{ width: 64, height: 64 }} />
           </Html>
         )}
 
         {showCool && (
-          <Html
-            position={[0, GAME_CONFIG.agent.emoteHeight, 0]}
-            center
-            distanceFactor={8}
-            transform
-            style={{ pointerEvents: 'none' }}>
+          <Html position={[0, GAME_CONFIG.agent.emoteHeight, 0]} center distanceFactor={8} transform style={{ pointerEvents: 'none' }}>
             <img src='/emotes/cool.webp' alt='cool' style={{ width: 64, height: 64 }} />
           </Html>
         )}
-      </group>
+      </Billboard>
     </>
   )
 }

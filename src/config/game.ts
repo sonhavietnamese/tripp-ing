@@ -3,7 +3,7 @@ import * as THREE from 'three'
 export const GAME_CONFIG = {
   positions: {
     boss: new THREE.Vector3(5, 0, -10),
-    bossFixedAttack: new THREE.Vector3(5, 0, -6.5),
+    bossFixedAttack: new THREE.Vector3(4, 0, -5.5),
     vending: new THREE.Vector3(-10, 0, -4),
     vendingFixedStand: new THREE.Vector3(-8.5, 0, -4),
   },
