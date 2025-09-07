@@ -49,6 +49,10 @@ interface FloorStore {
   performAttackSequence: () => Promise<void>
   /* buy & drink coroutine */
   performBuyCoke: () => Promise<void>
+
+  /* ---------------- Emotes ---------------- */
+  showCool: boolean
+  setShowCool: (v: boolean) => void
 }
 
 export const useFloorStore = create<FloorStore>((set, get) => ({
@@ -92,6 +96,10 @@ export const useFloorStore = create<FloorStore>((set, get) => ({
   showPerfection: false,
   setShowPerfection: (v) => set({ showPerfection: v }),
 
+  /* -------- Cool emote -------- */
+  showCool: false,
+  setShowCool: (v) => set({ showCool: v }),
+
   /* -------- Async attack sequence -------- */
   performAttackSequence: async () => {
     const { isAttacking } = get()
@@ -116,7 +124,8 @@ export const useFloorStore = create<FloorStore>((set, get) => ({
         bossAnimation: 'die',
         isAttacking: false,
         controlLocked: false,
-        showCry: true,
+        showCry: false,
+        showCool: true,
         showGuideCoke: true,
       })
       return

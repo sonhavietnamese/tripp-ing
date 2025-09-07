@@ -17,7 +17,8 @@ export default function Agent() {
     setShowAttackButton, 
     showCry,
     setShowBuyCokeButton,
-    showPerfection
+    showPerfection,
+    showCool
   } = useFloorStore()
 
   const tempVector = useRef(new THREE.Vector3())
@@ -30,6 +31,8 @@ export default function Agent() {
   const cryTexture = useTexture('/emotes/cry.webp')
   /* texture for perfection emote */
   const perfectionTexture = useTexture('/emotes/perfection.webp')
+  /* texture for cool emote */
+  const coolTexture = useTexture('/emotes/cool.webp')
 
   const cameraOffset = new THREE.Vector3(10, 15, 10)
   const lightOffset = new THREE.Vector3(5, 20, 5) // Different offset for the light
@@ -256,6 +259,15 @@ export default function Agent() {
             <mesh>
               <planeGeometry args={[1.2, 1.2]} />
               <meshBasicMaterial map={perfectionTexture} transparent />
+            </mesh>
+          </Billboard>
+        )}
+
+        {showCool && (
+          <Billboard position={[0, 2.4, 0]}>
+            <mesh>
+              <planeGeometry args={[1.2, 1.2]} />
+              <meshBasicMaterial map={coolTexture} transparent />
             </mesh>
           </Billboard>
         )}
