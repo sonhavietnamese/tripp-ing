@@ -1,5 +1,5 @@
 import { useFloorStore } from '@/stores/floor'
-import { Billboard, OrthographicCamera, useTexture } from '@react-three/drei'
+import { Html, OrthographicCamera } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
@@ -27,13 +27,6 @@ export default function Agent() {
   const currentQuaternion = useRef(new THREE.Quaternion())
   const targetQuaternion = useRef(new THREE.Quaternion())
   const lookAtMatrix = useRef(new THREE.Matrix4())
-
-  /* texture for cry emote */
-  const cryTexture = useTexture('/emotes/cry.webp')
-  /* texture for perfection emote */
-  const perfectionTexture = useTexture('/emotes/perfection.webp')
-  /* texture for cool emote */
-  const coolTexture = useTexture('/emotes/cool.webp')
 
   /* ------------------------------------------------------------------ */
   /* Engagement state                                                   */
@@ -241,30 +234,36 @@ export default function Agent() {
         <Tripp animation={status === 'idle' ? 'IDLE' : 'RUN'} />
 
         {showCry && (
-          <Billboard position={[0, GAME_CONFIG.agent.emoteHeight, 0]}>
-            <mesh>
-              <planeGeometry args={[1.2, 1.2]} />
-              <meshBasicMaterial map={cryTexture} transparent />
-            </mesh>
-          </Billboard>
+          <Html
+            position={[0, GAME_CONFIG.agent.emoteHeight, 0]}
+            center
+            distanceFactor={8}
+            transform
+            style={{ pointerEvents: 'none' }}>
+            <img src='/emotes/cry.webp' alt='cry' style={{ width: 64, height: 64 }} />
+          </Html>
         )}
 
         {showPerfection && (
-          <Billboard position={[0, GAME_CONFIG.agent.emoteHeight, 0]}>
-            <mesh>
-              <planeGeometry args={[1.2, 1.2]} />
-              <meshBasicMaterial map={perfectionTexture} transparent />
-            </mesh>
-          </Billboard>
+          <Html
+            position={[0, GAME_CONFIG.agent.emoteHeight, 0]}
+            center
+            distanceFactor={8}
+            transform
+            style={{ pointerEvents: 'none' }}>
+            <img src='/emotes/perfection.webp' alt='perfection' style={{ width: 64, height: 64 }} />
+          </Html>
         )}
 
         {showCool && (
-          <Billboard position={[0, GAME_CONFIG.agent.emoteHeight, 0]}>
-            <mesh>
-              <planeGeometry args={[1.2, 1.2]} />
-              <meshBasicMaterial map={coolTexture} transparent />
-            </mesh>
-          </Billboard>
+          <Html
+            position={[0, GAME_CONFIG.agent.emoteHeight, 0]}
+            center
+            distanceFactor={8}
+            transform
+            style={{ pointerEvents: 'none' }}>
+            <img src='/emotes/cool.webp' alt='cool' style={{ width: 64, height: 64 }} />
+          </Html>
         )}
       </group>
     </>
