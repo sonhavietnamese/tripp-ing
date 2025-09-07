@@ -238,19 +238,19 @@ export default function Agent() {
       </group>
       <Billboard ref={billboardRef}>
         {showCry && (
-          <Html position={[0, GAME_CONFIG.agent.emoteHeight, 0]} center transform style={{ pointerEvents: 'none' }}>
+          <Html zIndexRange={[0, 100]} position={[0, GAME_CONFIG.agent.emoteHeight, 0]} center transform style={{ pointerEvents: 'none' }}>
             <img src='/emotes/cry.webp' alt='cry' style={{ width: 64, height: 64 }} />
           </Html>
         )}
 
         {showPerfection && (
-          <Html position={[0, GAME_CONFIG.agent.emoteHeight, 0]} center transform style={{ pointerEvents: 'none' }}>
+          <Html zIndexRange={[0, 100]} position={[0, GAME_CONFIG.agent.emoteHeight, 0]} center transform style={{ pointerEvents: 'none' }}>
             <img src='/emotes/perfection.webp' alt='perfection' style={{ width: 64, height: 64 }} />
           </Html>
         )}
 
         {showCool && (
-          <Html position={[0, GAME_CONFIG.agent.emoteHeight, 0]} center transform style={{ pointerEvents: 'none' }}>
+          <Html zIndexRange={[0, 100]} position={[0, GAME_CONFIG.agent.emoteHeight, 0]} center transform style={{ pointerEvents: 'none' }}>
             <img src='/emotes/cool.webp' alt='cool' style={{ width: 64, height: 64 }} />
           </Html>
         )}

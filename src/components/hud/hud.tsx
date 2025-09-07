@@ -21,7 +21,7 @@ export default function Hud() {
   const slots = [0, 1, 2]
 
   return (
-    <div className='fixed z-[10] pointer-events-none top-0 left-0 w-full h-full'>
+    <div className='fixed z-[9999] pointer-events-none top-0 left-0 w-full h-full'>
       <aside className='absolute top-4 left-1/2 -translate-x-1/2 pointer-events-none'>
         <ul className='flex gap-1'>
           {slots.map((i) => (
@@ -37,7 +37,7 @@ export default function Hud() {
 
       {/* Win Modal */}
       {showWinModal && (
-        <div className='absolute inset-0 bg-black/60 flex items-center justify-center pointer-events-auto z-20'>
+        <div className='fixed inset-0 bg-black/60 flex items-center justify-center pointer-events-auto z-[10000]'>
           <div className='bg-white rounded-lg p-6 max-w-sm text-center shadow-xl flex flex-col items-center gap-4'>
             <h2 className='text-xl font-bold text-emerald-700'>Coke Power up!</h2>
             <p className='text-sm text-gray-700'>

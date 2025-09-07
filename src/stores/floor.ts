@@ -132,8 +132,7 @@ export const useFloorStore = create<FloorStore>((set, get) => ({
   /* ---------------- Score defaults & helpers ---------------- */
   score: 0,
   setScore: (n) => set({ score: Math.max(0, Math.min(3, n)) }),
-  addScore: (d) =>
-    set((s) => ({ score: Math.max(0, Math.min(3, s.score + d)) })),
+  addScore: (d) => set((s) => ({ score: Math.max(0, Math.min(3, s.score + d)) })),
 
   /* one-time score flags */
   scoredAttack: false,
@@ -182,13 +181,19 @@ export const useFloorStore = create<FloorStore>((set, get) => ({
         isAttacking: false,
         controlLocked: false,
         showGuideCoke: true,
-        showWinModal: true,
       })
-      // ensure winCode populated (in case it was cleared)
+
+      // play cool emote immediately
+      get().setEmote('cool')
+
+      // wait 2 s before showing win modal
+      await new Promise((r) => setTimeout(r, 3000))
+
+      // ensure winCode populated (in case it was cleared) then show modal
       if (!get().winCode) {
         set({ winCode: GAME_CONFIG.promo.winCode })
       }
-      get().setEmote('cool')
+      set({ showWinModal: true })
       return
     }
 
@@ -220,7 +225,7 @@ export const useFloorStore = create<FloorStore>((set, get) => ({
     get().setEmote('perfection')
 
     // drink duration
-    await new Promise((r) => setTimeout(r, 3000))
+    await new Promise((r) => setTimeout(r, 1000))
 
     // apply heal & buff
     set((s) => ({

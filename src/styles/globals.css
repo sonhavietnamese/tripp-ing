@@ -1,1 +1,6 @@
 @import 'tailwindcss';
+
+/* prevent scroll on touch devices */
+* {
+  overscroll-behavior: none;
+}
