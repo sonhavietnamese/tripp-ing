@@ -53,8 +53,10 @@ interface FloorStore {
   /* ---------------- Emotes ---------------- */
   showCool: boolean
   setShowCool: (v: boolean) => void
-}
 
+  /* ---------------- Overall progression ---------------- */
+  bossDefeated: boolean
+}
 export const useFloorStore = create<FloorStore>((set, get) => ({
   target: new THREE.Vector3(0, 0, 0),
   setTarget: (target) => set({ target }),
@@ -100,6 +102,9 @@ export const useFloorStore = create<FloorStore>((set, get) => ({
   showCool: false,
   setShowCool: (v) => set({ showCool: v }),
 
+  /* ---------------- Progression defaults ---------------- */
+  bossDefeated: false,
+
   /* -------- Async attack sequence -------- */
   performAttackSequence: async () => {
     const { isAttacking } = get()
@@ -122,6 +127,7 @@ export const useFloorStore = create<FloorStore>((set, get) => ({
     if (get().bossHP <= 0) {
       set({
         bossAnimation: 'die',
+        bossDefeated: true,
         isAttacking: false,
         controlLocked: false,
         showCry: false,

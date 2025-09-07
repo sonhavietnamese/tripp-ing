@@ -18,7 +18,8 @@ export default function Agent() {
     showCry,
     setShowBuyCokeButton,
     showPerfection,
-    showCool
+    showCool,
+    bossDefeated
   } = useFloorStore()
 
   const tempVector = useRef(new THREE.Vector3())
@@ -75,12 +76,14 @@ export default function Agent() {
     /* -------------------------------------------------------------- */
     /* Detect boss proximity – decide when to trigger one-time engage */
     /* -------------------------------------------------------------- */
-    const distToBoss = pos.distanceTo(BOSS_POSITION.current)
-    if (!engagedThisProximity.current && distToBoss < AUTO_ENGAGE_RANGE) {
-      autoEngageActive.current = true
-    }
-    if (distToBoss > AUTO_ENGAGE_RANGE + 0.5) {
-      engagedThisProximity.current = false
+    if (!bossDefeated) {
+      const distToBoss = pos.distanceTo(BOSS_POSITION.current)
+      if (!engagedThisProximity.current && distToBoss < AUTO_ENGAGE_RANGE) {
+        autoEngageActive.current = true
+      }
+      if (distToBoss > AUTO_ENGAGE_RANGE + 0.5) {
+        engagedThisProximity.current = false
+      }
     }
 
     /* -------------------------------------------------------------- */
@@ -98,7 +101,7 @@ export default function Agent() {
     /* Determine effective target                                     */
     /* -------------------------------------------------------------- */
     let computedTarget = target
-    if (autoEngageActive.current) {
+    if (autoEngageActive.current && !bossDefeated) {
       // Boss engagement takes priority
       computedTarget = FIXED_ATTACK_POSITION.current
       // keep store target updated so the floor indicator can fade properly
@@ -185,7 +188,7 @@ export default function Agent() {
         characterRef.current.quaternion.copy(currentQuaternion.current)
       }
       // First-time arrival actions
-      if (!engagedThisProximity.current) {
+      if (!bossDefeated && !engagedThisProximity.current) {
         setShowAttackButton(true)
         setControlLocked(true)
         engagedThisProximity.current = true
