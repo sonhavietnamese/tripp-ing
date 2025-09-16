@@ -76,15 +76,20 @@ export default function Hud() {
       )}
 
       {/* Bottom-center player UI */}
-      <div className='absolute bottom-4 left-1/2 -translate-x-1/2 pointer-events-none'>
-        <div className='pointer-events-auto rounded-md bg-black/50 text-white px-4 py-2 text-sm flex gap-4'>
-          <span>
-            Tripp&nbsp;HP:&nbsp;{trippHP}/{trippMaxHP}
-          </span>
-          <span>DMG:&nbsp;{trippDamage}</span>
-          <span>
-            Boss&nbsp;HP:&nbsp;{bossHP}/{bossMaxHP}
-          </span>
+      <div className='absolute bottom-4 left-1/2 -translate-x-1/2 pointer-events-none w-[280px] scale-[0.9]'>
+        <img src='/elements/panel-player.png' className='w-full h-auto top-0 left-0' />
+        <img src='/elements/avatar-normal.png' className='absolute w-[130px] h-auto top-[-4px] left-[-18px]' />
+        <div className='absolute top-[24px] left-0 w-full h-full pl-[120px] pr-10 flex flex-col gap-2'>
+          <div className='flex items-center gap-2 font-ciko text-white text-2xl w-full justify-between'>
+            <img src='/elements/element-hp.png' className='h-[30px] w-auto top-0 left-0' />
+            <span>
+              {trippHP}/{trippMaxHP}
+            </span>
+          </div>
+          <div className='flex items-center gap-2 font-ciko text-white text-2xl w-full justify-between'>
+            <img src='/elements/element-dmg.png' className='h-[32px] w-auto top-0 left-0' />
+            <span>{trippDamage}</span>
+          </div>
         </div>
       </div>
     </div>

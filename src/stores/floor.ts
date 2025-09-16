@@ -230,7 +230,7 @@ export const useFloorStore = create<FloorStore>((set, get) => ({
     // apply heal & buff
     set((s) => ({
       trippHP: s.trippMaxHP,
-      trippDamage: 10,
+      trippDamage: 999,
     }))
 
     // gain score for drinking coke
