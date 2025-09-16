@@ -22,14 +22,23 @@ export default function Hud() {
 
   return (
     <div className='fixed z-[9999] pointer-events-none top-0 left-0 w-full h-full'>
-      <aside className='absolute top-4 left-1/2 -translate-x-1/2 pointer-events-none'>
+      <aside className='absolute select-none top-4 left-1/2 flex justify-between -translate-x-1/2 pointer-events-none md:w-[700px] w-full px-4'>
+        <div className='font-oc-format flex text-lg flex-col gap-1 p-4 bg-[#6A371D] border-[#B05100] border-[3px] rounded-3xl relative leading-none text-white tracking-wider'>
+          <span className='text-xl'>Mission: Beat Grub</span>
+          <span className='after:content-[""] after:absolute after:left-0 after:w-full after:h-1 w-fit after:top-1/2 after:-translate-y-1/2 after:bg-white relative'>
+            1 — Find Grub
+          </span>
+          {/* <span className='after:content-[""] after:absolute after:left-0 after:w-full after:h-1 w-fit after:top-1/2 after:-translate-y-1/2 after:bg-white relative'>
+            2 — Get a Coke
+          </span> */}
+          {/* <span className='after:content-[""] after:absolute after:left-0 after:w-full after:h-1 w-fit after:top-1/2 after:-translate-y-1/2 after:bg-white relative'>
+            3 — Hit Grub
+          </span> */}
+        </div>
         <ul className='flex gap-1'>
           {slots.map((i) => (
             <li key={i} className='w-8 aspect-square'>
-              <img
-                src={i < score ? '/elements/chestnut.png' : '/elements/chestnut-silhouette.png'}
-                alt='Chestnut'
-              />
+              <img src={i < score ? '/elements/chestnut.png' : '/elements/chestnut-silhouette.png'} alt='Chestnut' />
             </li>
           ))}
         </ul>
@@ -40,14 +49,10 @@ export default function Hud() {
         <div className='fixed inset-0 bg-black/60 flex items-center justify-center pointer-events-auto z-[10000]'>
           <div className='bg-white rounded-lg p-6 max-w-sm text-center shadow-xl flex flex-col items-center gap-4'>
             <h2 className='text-xl font-bold text-emerald-700'>Coke Power up!</h2>
-            <p className='text-sm text-gray-700'>
-              Here&#39;s your code, let&#39;s go pick one in your nearest store
-            </p>
+            <p className='text-sm text-gray-700'>Here&#39;s your code, let&#39;s go pick one in your nearest store</p>
             <QRCode value={winCode} size={128} />
             <code className='font-mono text-sm'>{winCode}</code>
-            <button
-              className='mt-2 px-4 py-2 bg-emerald-600 text-white rounded-md shadow'
-              onClick={() => setShowWinModal(false)}>
+            <button className='mt-2 px-4 py-2 bg-emerald-600 text-white rounded-md shadow' onClick={() => setShowWinModal(false)}>
               Close
             </button>
           </div>
@@ -56,9 +61,7 @@ export default function Hud() {
 
       {showAttackButton && (
         <div className='absolute bottom-4 right-4 pointer-events-none'>
-          <button
-            className='pointer-events-auto px-6 py-3 rounded-md bg-red-600 text-white text-lg shadow-lg'
-            onClick={performAttackSequence}>
+          <button className='pointer-events-auto px-6 py-3 rounded-md bg-red-600 text-white text-lg shadow-lg' onClick={performAttackSequence}>
             Attack
           </button>
         </div>
@@ -66,9 +69,7 @@ export default function Hud() {
 
       {showBuyCokeButton && (
         <div className='absolute bottom-[5.5rem] right-4 pointer-events-none'>
-          <button
-            className='pointer-events-auto px-6 py-3 rounded-md bg-emerald-600 text-white text-lg shadow-lg'
-            onClick={performBuyCoke}>
+          <button className='pointer-events-auto px-6 py-3 rounded-md bg-emerald-600 text-white text-lg shadow-lg' onClick={performBuyCoke}>
             Buy&nbsp;Coke
           </button>
         </div>
