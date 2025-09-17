@@ -80,6 +80,16 @@ interface FloorStore {
   setShowOnboardingModal: (v: boolean) => void
   hasOnboarded: boolean
   setHasOnboarded: (v: boolean) => void
+
+  /* ---------------- Mission progression ---------------- */
+  /**
+   * 0 — Find Grub (hit boss once)
+   * 1 — Get a Coke (buy from vending)
+   * 2 — Hit Grub (final kill)
+   * 3 — Mission complete
+   */
+  missionStep: number
+  setMissionStep: (n: number) => void
 }
 
 export const useFloorStore = create<FloorStore>((set, get) => ({
@@ -159,6 +169,10 @@ export const useFloorStore = create<FloorStore>((set, get) => ({
   hasOnboarded: false,
   setHasOnboarded: (v) => set({ hasOnboarded: v }),
 
+  /* ---------------- Mission defaults ---------------- */
+  missionStep: 0,
+  setMissionStep: (n) => set({ missionStep: n }),
+
   /* -------- Async attack sequence -------- */
   performAttackSequence: async () => {
     const { isAttacking } = get()
@@ -177,6 +191,11 @@ export const useFloorStore = create<FloorStore>((set, get) => ({
       return { bossHP: newBossHP }
     })
 
+    // progress mission: first successful hit on boss
+    if (get().missionStep === 0) {
+      set({ missionStep: 1 })
+    }
+
     // gain score once for attacking
     if (!get().scoredAttack) {
       set({ scoredAttack: true })
@@ -187,6 +206,8 @@ export const useFloorStore = create<FloorStore>((set, get) => ({
     if (get().bossHP <= 0) {
       // full score on kill
       get().setScore(3)
+      // mission complete
+      set({ missionStep: 3 })
       set({
         bossAnimation: 'die',
         bossDefeated: true,
@@ -244,6 +265,11 @@ export const useFloorStore = create<FloorStore>((set, get) => ({
       trippHP: s.trippMaxHP,
       trippDamage: 999,
     }))
+
+    // advance mission after buying coke
+    if (get().missionStep < 2) {
+      set({ missionStep: 2 })
+    }
 
     // gain score for drinking coke
     if (!get().scoredDrink) {

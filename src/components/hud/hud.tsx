@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useFloorStore } from '@/stores/floor'
 import QRCode from 'react-qr-code'
+import { cn } from '@/lib/utils'
 
 export default function Hud() {
   const {
@@ -17,6 +18,7 @@ export default function Hud() {
     setShowOnboardingModal,
     hasOnboarded,
     setHasOnboarded,
+    missionStep,
     showWinModal,
     setShowWinModal,
     winCode,
@@ -40,19 +42,23 @@ export default function Hud() {
           className='absolute select-none top-4 left-1/2 flex justify-between -translate-x-1/2 pointer-events-none md:w-[700px] w-full px-4 origin-top-left opacity-0 animate-[slide-down-fade_400ms_ease-out_50ms_forwards]'>
           <div className='font-oc-format flex text-lg flex-col gap-1 p-4 bg-[#6A371D] border-[#B05100] border-[3px] rounded-3xl relative leading-none text-white tracking-wider'>
             <span className='text-lg'>Mission: Beat Grub</span>
-            <span className='after:content-[""] after:absolute after:left-0 after:w-full after:h-1 w-fit after:top-1/2 after:-translate-y-1/2 after:bg-white relative'>
-              1 — Find Grub
-            </span>
-            {/* <span className='after:content-[""] after:absolute after:left-0 after:w-full after:h-1 w-fit after:top-1/2 after:-translate-y-1/2 after:bg-white relative'>
-            2 — Get a Coke
-          </span> */}
-            {/* <span className='after:content-[""] after:absolute after:left-0 after:w-full after:h-1 w-fit after:top-1/2 after:-translate-y-1/2 after:bg-white relative'>
-            3 — Hit Grub
-          </span> */}
+            {/* dynamic mission lines */}
+            {['Find Grub', 'Get a Coke', 'Hit Grub'].map((label, i) => {
+              const completed = missionStep > i
+              const future = missionStep < i
+              return (
+                <span
+                  key={label}
+                  className={cn(
+                    'relative w-fit after:content-[""] after:absolute after:left-0 after:w-full after:h-1 after:top-1/2 after:-translate-y-1/2 after:bg-white',
+                    future && 'opacity-60',
+                  )}>
+                  {completed ? '✓' : i + 1} — {label}
+                </span>
+              )
+            })}
           </div>
-          <ul
-            id='score-slots'
-            className='flex gap-1 opacity-0 animate-[slide-down-fade_400ms_ease-out_100ms_forwards]'>
+          <ul id='score-slots' className='flex gap-1 opacity-0 animate-[slide-down-fade_400ms_ease-out_100ms_forwards]'>
             {slots.map((i) => (
               <li key={i} className='w-8 aspect-square'>
                 <img src={i < score ? '/elements/chestnut.png' : '/elements/chestnut-silhouette.png'} alt='Chestnut' />
