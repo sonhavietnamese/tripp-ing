@@ -94,6 +94,16 @@ interface FloorStore {
   /* ---------------- Shop modal ---------------- */
   showShopModal: boolean
   setShowShopModal: (v: boolean) => void
+
+  /* ---------------- Camera shake -------------- */
+  cameraShakeTrigger: number
+  cameraShakeIntensity: number
+  cameraShakeDurationMs: number
+  /**
+   * Increment trigger to notify subscribers and optionally override
+   * intensity / duration for this shake.
+   */
+  kickCameraShake: (intensity?: number, durationMs?: number) => void
 }
 
 export const useFloorStore = create<FloorStore>((set, get) => ({
@@ -181,6 +191,17 @@ export const useFloorStore = create<FloorStore>((set, get) => ({
   showShopModal: false,
   setShowShopModal: (v) => set({ showShopModal: v }),
 
+  /* ---------------- Camera shake defaults ---------------- */
+  cameraShakeTrigger: 0,
+  cameraShakeIntensity: GAME_CONFIG.agent?.cameraShake?.intensity ?? 0.12,
+  cameraShakeDurationMs: GAME_CONFIG.agent?.cameraShake?.durationMs ?? 180,
+  kickCameraShake: (intensity, durationMs) =>
+    set((s) => ({
+      cameraShakeTrigger: s.cameraShakeTrigger + 1,
+      cameraShakeIntensity: intensity ?? s.cameraShakeIntensity,
+      cameraShakeDurationMs: durationMs ?? s.cameraShakeDurationMs,
+    })),
+
   /* -------- Async attack sequence -------- */
   performAttackSequence: async () => {
     const { isAttacking } = get()
@@ -198,6 +219,9 @@ export const useFloorStore = create<FloorStore>((set, get) => ({
       const newBossHP = Math.max(0, s.bossHP - s.trippDamage)
       return { bossHP: newBossHP }
     })
+
+    // small camera shake on each successful hit
+    get().kickCameraShake()
 
     // progress mission: first successful hit on boss
     if (get().missionStep === 0) {

@@ -21,6 +21,10 @@ export default function Agent() {
     showPerfection,
     showCool,
     bossDefeated,
+    /* camera shake */
+    cameraShakeTrigger,
+    cameraShakeIntensity,
+    cameraShakeDurationMs,
   } = useFloorStore()
 
   const tempVector = useRef(new THREE.Vector3())
@@ -28,6 +32,21 @@ export default function Agent() {
   const targetQuaternion = useRef(new THREE.Quaternion())
   const lookAtMatrix = useRef(new THREE.Matrix4())
   const billboardRef = useRef<THREE.Group>(null!)
+
+  /* ------------------------------------------------------------------ */
+  /* Camera shake refs                                                  */
+  /* ------------------------------------------------------------------ */
+  const shakeTimeLeft = useRef(0)
+  const shakeDuration = useRef(0)
+  const shakeIntensity = useRef(0)
+
+  /* react to shake trigger increments */
+  useEffect(() => {
+    // whenever trigger changes, start a new shake using current intensity/duration values from store
+    shakeDuration.current = cameraShakeDurationMs / 1000
+    shakeTimeLeft.current = shakeDuration.current
+    shakeIntensity.current = cameraShakeIntensity
+  }, [cameraShakeTrigger, cameraShakeDurationMs, cameraShakeIntensity])
 
   /* ------------------------------------------------------------------ */
   /* Engagement state                                                   */
@@ -100,8 +119,25 @@ export default function Agent() {
     }
 
     // Camera and light should always follow the player, regardless of target
-    const desiredCameraPosition = characterRef.current.position.clone().add(GAME_CONFIG.agent.cameraOffset)
-    const desiredLightPosition = characterRef.current.position.clone().add(GAME_CONFIG.agent.lightOffset)
+    let desiredCameraPosition = characterRef.current.position.clone().add(GAME_CONFIG.agent.cameraOffset)
+    let desiredLightPosition = characterRef.current.position.clone().add(GAME_CONFIG.agent.lightOffset)
+
+    /* -------------------------------------------------------------- */
+    /* Apply camera shake jitter                                       */
+    /* -------------------------------------------------------------- */
+    if (shakeTimeLeft.current > 0) {
+      const t = shakeTimeLeft.current / shakeDuration.current // 1 -> 0
+      const amp = shakeIntensity.current * t
+      const jitter = new THREE.Vector3(
+        (Math.random() - 0.5) * 2 * amp,
+        (Math.random() - 0.5) * 2 * amp,
+        (Math.random() - 0.5) * 2 * amp * 0.6,
+      )
+      desiredCameraPosition = desiredCameraPosition.clone().add(jitter)
+      desiredLightPosition = desiredLightPosition.clone().add(jitter)
+
+      shakeTimeLeft.current = Math.max(0, shakeTimeLeft.current - delta)
+    }
 
     cameraRef.current.position.lerp(desiredCameraPosition, 0.8)
     directionalLight.current.position.lerp(desiredLightPosition, 0.8)

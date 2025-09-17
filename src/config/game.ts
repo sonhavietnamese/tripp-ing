@@ -19,6 +19,11 @@ export const GAME_CONFIG = {
     lightOffset: new THREE.Vector3(5, 20, 5),
     cameraDeadzone: 0.5,
     emoteHeight: 2.4,
+    /* default camera shake values (used when hitting the boss) */
+    cameraShake: {
+      intensity: 0.12,
+      durationMs: 180,
+    },
   },
   bossEffects: {
     hitBillboardY: 2.8,
