@@ -69,12 +69,12 @@ export default function Floor() {
         <meshStandardMaterial map={texture} />
       </mesh>
 
-      <mesh receiveShadow position={[2, 0.01, -4]} rotation={[THREE.MathUtils.degToRad(-90), 0, THREE.MathUtils.degToRad(60)]} scale={7}>
+      <mesh receiveShadow position={[-4, 0.01, -1]} rotation={[THREE.MathUtils.degToRad(-90), 0, THREE.MathUtils.degToRad(60)]} scale={7}>
         <planeGeometry args={[1, 1]} />
         <meshStandardMaterial map={guideBossTexture} transparent alphaTest={0.5} />
       </mesh>
 
-      <mesh receiveShadow position={[-5, 0.1, -7]} rotation={[THREE.MathUtils.degToRad(-90), 0, THREE.MathUtils.degToRad(20)]} scale={7}>
+      <mesh receiveShadow position={[-12, 0.1, -6]} rotation={[THREE.MathUtils.degToRad(-90), 0, THREE.MathUtils.degToRad(20)]} scale={5}>
         <planeGeometry args={[1, 1]} />
         <meshStandardMaterial map={guideCokeTexture} transparent alphaTest={0.5} />
       </mesh>

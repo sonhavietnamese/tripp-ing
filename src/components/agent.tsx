@@ -224,7 +224,6 @@ export default function Agent() {
         castShadow={true}
         shadow-enabled={false}
         shadow-normalBias={0.06}
-        // shadow-bias={0.1}
         shadow-mapSize={[2048, 2048]}
         shadow-camera-left={-50}
         shadow-camera-right={50}

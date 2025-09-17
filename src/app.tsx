@@ -7,12 +7,12 @@ import Agent from './components/agent'
 import Footsteps from './components/footsteps'
 import Floor from './components/floor'
 import Hud from './components/hud/hud'
-import { VendingMachine } from './components/vending-machine'
 import * as THREE from 'three'
 import BossV2 from './components/boss-v2'
 import { GAME_CONFIG } from '@/config/game'
 import { useFloorStore } from '@/stores/floor'
 import AttackEffects from './components/attack-effects'
+import { SevenEleven } from './components/seven-eleven'
 
 const queryClient = new QueryClient()
 
@@ -54,9 +54,13 @@ function Experience() {
       <Footsteps />
       <AttackEffects />
 
-      <VendingMachine
+      {/* <VendingMachine
         position={GAME_CONFIG.positions.vending.toArray()}
         rotation={[0, THREE.MathUtils.degToRad(GAME_CONFIG.scene.vendingRotationYDeg), 0]}
+      /> */}
+      <SevenEleven
+        position={GAME_CONFIG.positions.sevenEleven.toArray()}
+        rotation={[0, THREE.MathUtils.degToRad(GAME_CONFIG.scene.sevenElevenRotationYDeg), 0]}
       />
       <BossV2
         position={GAME_CONFIG.scene.bossModelPosition.toArray()}
