@@ -76,12 +76,12 @@ export default function Hud() {
           <div className='relative opacity-0 animate-[slide-up-fade_400ms_ease-out_75ms_forwards] p-10'>
             <img src='/elements/panel-onboarding.png' alt='Onboarding' className='w-[540px] max-w-full h-auto' />
             <button
-              className='absolute bottom-14 right-16'
+              className='absolute bottom-14 right-16 sm:right-20 sm:bottom-20'
               onClick={() => {
                 setShowOnboardingModal(false)
                 setHasOnboarded(true)
               }}>
-              <img src='/elements/element-button-ok.png' alt='OK' className='w-[60px] h-auto' />
+              <img src='/elements/element-button-ok.png' alt='OK' className='sm:w-[80px] w-[60px] h-auto' />
             </button>
           </div>
         </div>
