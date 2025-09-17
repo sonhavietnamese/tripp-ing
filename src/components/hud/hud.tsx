@@ -22,9 +22,9 @@ export default function Hud() {
 
   return (
     <div className='fixed z-[9999] pointer-events-none top-0 left-0 w-full h-full'>
-      <aside className='absolute select-none top-4 left-1/2 flex justify-between -translate-x-1/2 pointer-events-none md:w-[700px] w-full px-4'>
+      <aside className='absolute select-none top-4 left-1/2 flex justify-between -translate-x-1/2 pointer-events-none md:w-[700px] w-full px-4 origin-top-left'>
         <div className='font-oc-format flex text-lg flex-col gap-1 p-4 bg-[#6A371D] border-[#B05100] border-[3px] rounded-3xl relative leading-none text-white tracking-wider'>
-          <span className='text-xl'>Mission: Beat Grub</span>
+          <span className='text-lg'>Mission: Beat Grub</span>
           <span className='after:content-[""] after:absolute after:left-0 after:w-full after:h-1 w-fit after:top-1/2 after:-translate-y-1/2 after:bg-white relative'>
             1 — Find Grub
           </span>
