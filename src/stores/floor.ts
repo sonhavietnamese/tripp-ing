@@ -90,6 +90,10 @@ interface FloorStore {
    */
   missionStep: number
   setMissionStep: (n: number) => void
+
+  /* ---------------- Shop modal ---------------- */
+  showShopModal: boolean
+  setShowShopModal: (v: boolean) => void
 }
 
 export const useFloorStore = create<FloorStore>((set, get) => ({
@@ -172,6 +176,10 @@ export const useFloorStore = create<FloorStore>((set, get) => ({
   /* ---------------- Mission defaults ---------------- */
   missionStep: 0,
   setMissionStep: (n) => set({ missionStep: n }),
+
+  /* ---------------- Shop modal defaults ---------------- */
+  showShopModal: false,
+  setShowShopModal: (v) => set({ showShopModal: v }),
 
   /* -------- Async attack sequence -------- */
   performAttackSequence: async () => {

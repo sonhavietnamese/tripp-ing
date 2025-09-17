@@ -19,6 +19,9 @@ export default function Hud() {
     hasOnboarded,
     setHasOnboarded,
     missionStep,
+    /* shop */
+    showShopModal,
+    setShowShopModal,
     showWinModal,
     setShowWinModal,
     winCode,
@@ -116,7 +119,24 @@ export default function Hud() {
         <div className='absolute bottom-[16%] active:scale-[.8] transition-transform duration-100 left-1/2 w-[140px] h-[100px] flex justify-center items-center -translate-x-1/2 pointer-events-none'>
           <button
             className='pointer-events-auto w-full h-full bg-[url(/elements/element-button-enter.png)] bg-no-repeat bg-center bg-contain'
-            onClick={performBuyCoke}></button>
+            onClick={() => setShowShopModal(true)}></button>
+        </div>
+      )}
+
+      {/* Shop Modal */}
+      {showShopModal && (
+        <div className='fixed inset-0 bg-black/60 flex items-center justify-center pointer-events-auto z-[10000] opacity-0 animate-[fade-in_300ms_ease-out_forwards]'>
+          <div className='relative opacity-0 animate-[slide-up-fade_400ms_ease-out_75ms_forwards] p-10'>
+            <img src='/elements/panel-shop.png' alt='Shop' className='w-[540px] max-w-full h-auto' />
+            <button
+              className='absolute bottom-14 right-16 sm:right-20 sm:bottom-20'
+              onClick={() => {
+                setShowShopModal(false)
+                performBuyCoke()
+              }}>
+              <img src='/elements/element-button-buy.png' alt='Buy' className='sm:w-[80px] w-[60px] h-auto' />
+            </button>
+          </div>
         </div>
       )}
 
