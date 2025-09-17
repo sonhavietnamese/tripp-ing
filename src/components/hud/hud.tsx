@@ -50,10 +50,11 @@ export default function Hud() {
                 <span
                   key={label}
                   className={cn(
-                    'relative w-fit after:content-[""] after:absolute after:left-0 after:w-full after:h-1 after:top-1/2 after:-translate-y-1/2 after:bg-white',
+                    completed &&
+                      'relative w-fit after:content-[""] after:absolute after:left-0 after:w-full after:h-1 after:top-1/2 after:-translate-y-1/2 after:bg-white',
                     future && 'opacity-60',
                   )}>
-                  {completed ? '✓' : i + 1} — {label}
+                  {i + 1} — {label}
                 </span>
               )
             })}
@@ -72,15 +73,15 @@ export default function Hud() {
       {showOnboardingModal && (
         <div className='fixed inset-0 bg-black/60 flex items-center justify-center pointer-events-auto z-[10000] opacity-0 animate-[fade-in_300ms_ease-out_forwards]'>
           {/* Panel container to anchor the OK button */}
-          <div className='relative opacity-0 animate-[slide-up-fade_400ms_ease-out_75ms_forwards]'>
+          <div className='relative opacity-0 animate-[slide-up-fade_400ms_ease-out_75ms_forwards] p-10'>
             <img src='/elements/panel-onboarding.png' alt='Onboarding' className='w-[540px] max-w-full h-auto' />
             <button
-              className='absolute bottom-4 left-4'
+              className='absolute bottom-14 right-16'
               onClick={() => {
                 setShowOnboardingModal(false)
                 setHasOnboarded(true)
               }}>
-              <img src='/elements/element-button-ok.png' alt='OK' className='w-[140px] h-auto' />
+              <img src='/elements/element-button-ok.png' alt='OK' className='w-[60px] h-auto' />
             </button>
           </div>
         </div>
