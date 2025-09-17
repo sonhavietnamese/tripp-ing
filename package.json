@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "mint": "tsx scripts/mint-to.ts",
-    "mint:example": "tsx scripts/example.ts"
+    "mint:example": "tsx scripts/example.ts",
+    "compress:assets": "tsx script/compress-assets.ts"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.4",
@@ -45,6 +46,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.3.0",
+    "sharp": "^0.34.3",
     "tsx": "^4.7.0",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.39.1",

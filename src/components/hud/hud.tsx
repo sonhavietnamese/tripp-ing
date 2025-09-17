@@ -24,6 +24,7 @@ export default function Hud() {
     setShowShopModal,
     showWinModal,
     winCode,
+    showCry,
   } = useFloorStore()
 
   /* ---------------- Onboarding delay ---------------- */
@@ -65,7 +66,7 @@ export default function Hud() {
           <ul id='score-slots' className='flex gap-1 opacity-0 animate-[slide-down-fade_400ms_ease-out_100ms_forwards]'>
             {slots.map((i) => (
               <li key={i} className='w-8 aspect-square'>
-                <img src={i < score ? '/elements/chestnut.png' : '/elements/chestnut-silhouette.png'} alt='Chestnut' />
+                <img src={i < score ? '/elements/webp/chestnut.webp' : '/elements/webp/chestnut-silhouette.webp'} alt='Chestnut' />
               </li>
             ))}
           </ul>
@@ -76,7 +77,7 @@ export default function Hud() {
       {showOnboardingModal && (
         <div className='fixed inset-0 bg-black/60 flex items-center justify-center pointer-events-auto z-[10000] opacity-0 animate-[fade-in_300ms_ease-out_forwards]'>
           <div className='relative opacity-0 animate-[slide-up-fade_400ms_ease-out_75ms_forwards] p-10'>
-            <img src='/elements/panel-onboarding.png' alt='Onboarding' className='w-[540px] max-w-full h-auto' fetchPriority='high' />
+            <img src='/elements/webp/panel-onboarding.webp' alt='Onboarding' className='w-[540px] max-w-full h-auto' fetchPriority='high' />
             <button
               className='absolute bottom-14 right-16 sm:right-20 sm:bottom-20'
               onClick={() => {
@@ -93,7 +94,7 @@ export default function Hud() {
       {showWinModal && (
         <div className='fixed inset-0 bg-black/60 flex items-center justify-center pointer-events-auto z-[10000]'>
           <div className='p-6 max-w-sm text-center flex flex-col items-center gap-4 relative'>
-            <img src='/elements/panel-qr.png' alt='Win' className='w-[540px] translate-x-[6%] max-w-full h-auto' />
+            <img src='/elements/webp/panel-qr.webp' alt='Win' className='w-[540px] translate-x-[6%] max-w-full h-auto' />
             <QRCode value={winCode} size={180} className='absolute top-[13%] rounded-xl' bgColor='#361607' fgColor='#F9F9F9' />
             <span className='absolute bottom-[16%] left-[20%] z-10 font-oc-format text-white'>({winCode})</span>
           </div>
@@ -104,7 +105,7 @@ export default function Hud() {
       {showAttackButton && hasOnboarded && (
         <div className='absolute bottom-[18%] active:scale-[.8] transition-transform duration-100 left-1/2 w-[100px] h-[100px] flex justify-center items-center -translate-x-1/2 pointer-events-none'>
           <button
-            className='pointer-events-auto w-full h-full bg-[url(/elements/element-button-attack.png)] bg-no-repeat bg-center bg-contain'
+            className='pointer-events-auto w-full h-full bg-[url(/elements/webp/element-button-attack.webp)] bg-no-repeat bg-center bg-contain'
             onClick={performAttackSequence}></button>
         </div>
       )}
@@ -113,7 +114,7 @@ export default function Hud() {
       {showBuyCokeButton && hasOnboarded && (
         <div className='absolute bottom-[16%] active:scale-[.8] transition-transform duration-100 left-1/2 w-[140px] h-[100px] flex justify-center items-center -translate-x-1/2 pointer-events-none'>
           <button
-            className='pointer-events-auto w-full h-full bg-[url(/elements/element-button-enter.png)] bg-no-repeat bg-center bg-contain'
+            className='pointer-events-auto w-full h-full bg-[url(/elements/webp/element-button-enter.webp)] bg-no-repeat bg-center bg-contain'
             onClick={() => setShowShopModal(true)}></button>
         </div>
       )}
@@ -122,14 +123,14 @@ export default function Hud() {
       {showShopModal && (
         <div className='fixed inset-0 bg-black/60 flex items-center justify-center pointer-events-auto z-[10000] opacity-0 animate-[fade-in_300ms_ease-out_forwards]'>
           <div className='relative opacity-0 animate-[slide-up-fade_400ms_ease-out_75ms_forwards] p-10'>
-            <img src='/elements/panel-shop.png' alt='Shop' className='w-[540px] max-w-full h-auto' />
+            <img src='/elements/webp/panel-shop.webp' alt='Shop' className='w-[540px] max-w-full h-auto' />
             <button
               className='absolute bottom-14 right-16 sm:right-20 sm:bottom-20'
               onClick={() => {
                 setShowShopModal(false)
                 performBuyCoke()
               }}>
-              <img src='/elements/element-button-buy.png' alt='Buy' className='sm:w-[80px] w-[60px] h-auto' />
+              <img src='/elements/webp/element-button-buy.webp' alt='Buy' className='sm:w-[80px] w-[60px] h-auto' />
             </button>
           </div>
         </div>
@@ -140,17 +141,22 @@ export default function Hud() {
         <div
           id='player-ui'
           className='absolute bottom-4 left-1/2 -translate-x-1/2 pointer-events-none w-[280px] scale-[0.9] opacity-0 animate-[slide-up-fade_450ms_ease-out_100ms_forwards]'>
-          <img src='/elements/panel-player.png' className='w-full h-auto top-0 left-0' />
-          <img src='/elements/avatar-normal.png' className='absolute w-[130px] h-auto top-[-4px] left-[-18px]' />
+          <img src='/elements/webp/panel-player.webp' className='w-full h-auto top-0 left-0' />
+
+          {showCry ? (
+            <img src='/elements/webp/avatar-cry.webp' className='absolute w-[130px] h-auto top-[-4px] left-[-18px]' />
+          ) : (
+            <img src='/elements/webp/avatar-normal.webp' className='absolute w-[130px] h-auto top-[-4px] left-[-18px]' />
+          )}
           <div className='absolute top-[24px] left-0 w-full h-full pl-[120px] pr-10 flex flex-col gap-2'>
             <div className='flex items-center gap-2 font-ciko text-white text-2xl w-full justify-between'>
-              <img src='/elements/element-hp.png' className='h-[30px] w-auto top-0 left-0' />
+              <img src='/elements/webp/element-hp.webp' className='h-[30px] w-auto top-0 left-0' />
               <span>
                 {trippHP}/{trippMaxHP}
               </span>
             </div>
             <div className='flex items-center gap-2 font-ciko text-white text-2xl w-full justify-between'>
-              <img src='/elements/element-dmg.png' className='h-[32px] w-auto top-0 left-0' />
+              <img src='/elements/webp/element-dmg.webp' className='h-[32px] w-auto top-0 left-0' />
               <span>{trippDamage}</span>
             </div>
           </div>
