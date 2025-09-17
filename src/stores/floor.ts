@@ -78,6 +78,8 @@ interface FloorStore {
   /* ---------------- Onboarding modal ---------------- */
   showOnboardingModal: boolean
   setShowOnboardingModal: (v: boolean) => void
+  hasOnboarded: boolean
+  setHasOnboarded: (v: boolean) => void
 }
 
 export const useFloorStore = create<FloorStore>((set, get) => ({
@@ -154,6 +156,8 @@ export const useFloorStore = create<FloorStore>((set, get) => ({
   /* ---------------- Onboarding modal defaults ---------------- */
   showOnboardingModal: false,
   setShowOnboardingModal: (v) => set({ showOnboardingModal: v }),
+  hasOnboarded: false,
+  setHasOnboarded: (v) => set({ hasOnboarded: v }),
 
   /* -------- Async attack sequence -------- */
   performAttackSequence: async () => {
