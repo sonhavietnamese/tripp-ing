@@ -8,11 +8,12 @@ export default function Hud() {
     trippHP,
     trippMaxHP,
     trippDamage,
-    bossHP,
-    bossMaxHP,
     showBuyCokeButton,
     performBuyCoke,
     score,
+    /* onboarding */
+    showOnboardingModal,
+    setShowOnboardingModal,
     showWinModal,
     setShowWinModal,
     winCode,
@@ -43,6 +44,29 @@ export default function Hud() {
           ))}
         </ul>
       </aside>
+
+      {/* Onboarding Modal */}
+      {showOnboardingModal && (
+        <div className='fixed inset-0 bg-black/60 flex items-center justify-center pointer-events-auto z-[10000]'>
+          {/* Panel container to anchor the OK button */}
+          <div className='relative'>
+            <img
+              src='/elements/panel-onboarding.png'
+              alt='Onboarding'
+              className='w-[540px] max-w-full h-auto'
+            />
+            <button
+              className='absolute bottom-4 left-4'
+              onClick={() => setShowOnboardingModal(false)}>
+              <img
+                src='/elements/element-button-ok.png'
+                alt='OK'
+                className='w-[140px] h-auto'
+              />
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Win Modal */}
       {showWinModal && (

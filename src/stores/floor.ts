@@ -75,7 +75,11 @@ interface FloorStore {
   setShowWinModal: (v: boolean) => void
   winCode: string
   setWinCode: (s: string) => void
+  /* ---------------- Onboarding modal ---------------- */
+  showOnboardingModal: boolean
+  setShowOnboardingModal: (v: boolean) => void
 }
+
 export const useFloorStore = create<FloorStore>((set, get) => ({
   target: new THREE.Vector3(0, 0, 0),
   setTarget: (target) => set({ target }),
@@ -146,6 +150,10 @@ export const useFloorStore = create<FloorStore>((set, get) => ({
   setShowWinModal: (v) => set({ showWinModal: v }),
   winCode: GAME_CONFIG.promo.winCode,
   setWinCode: (s) => set({ winCode: s }),
+
+  /* ---------------- Onboarding modal defaults ---------------- */
+  showOnboardingModal: true,
+  setShowOnboardingModal: (v) => set({ showOnboardingModal: v }),
 
   /* -------- Async attack sequence -------- */
   performAttackSequence: async () => {
