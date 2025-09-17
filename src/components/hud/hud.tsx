@@ -31,7 +31,9 @@ export default function Hud() {
 
   return (
     <div className='fixed z-[9999] pointer-events-none top-0 left-0 w-full h-full'>
-      <aside className='absolute select-none top-4 left-1/2 flex justify-between -translate-x-1/2 pointer-events-none md:w-[700px] w-full px-4 origin-top-left'>
+      {/* Top mission bar & score — hidden during onboarding */}
+      {!showOnboardingModal && (
+        <aside className='absolute select-none top-4 left-1/2 flex justify-between -translate-x-1/2 pointer-events-none md:w-[700px] w-full px-4 origin-top-left'>
         <div className='font-oc-format flex text-lg flex-col gap-1 p-4 bg-[#6A371D] border-[#B05100] border-[3px] rounded-3xl relative leading-none text-white tracking-wider'>
           <span className='text-lg'>Mission: Beat Grub</span>
           <span className='after:content-[""] after:absolute after:left-0 after:w-full after:h-1 w-fit after:top-1/2 after:-translate-y-1/2 after:bg-white relative'>
@@ -51,7 +53,8 @@ export default function Hud() {
             </li>
           ))}
         </ul>
-      </aside>
+        </aside>
+      )}
 
       {/* Onboarding Modal */}
       {showOnboardingModal && (
@@ -91,7 +94,8 @@ export default function Hud() {
         </div>
       )}
 
-      {showAttackButton && (
+      {/* Attack button hidden during onboarding */}
+      {showAttackButton && !showOnboardingModal && (
         <div className='absolute bottom-4 right-4 pointer-events-none'>
           <button className='pointer-events-auto px-6 py-3 rounded-md bg-red-600 text-white text-lg shadow-lg' onClick={performAttackSequence}>
             Attack
@@ -99,7 +103,8 @@ export default function Hud() {
         </div>
       )}
 
-      {showBuyCokeButton && (
+      {/* Buy Coke button hidden during onboarding */}
+      {showBuyCokeButton && !showOnboardingModal && (
         <div className='absolute bottom-[5.5rem] right-4 pointer-events-none'>
           <button className='pointer-events-auto px-6 py-3 rounded-md bg-emerald-600 text-white text-lg shadow-lg' onClick={performBuyCoke}>
             Buy&nbsp;Coke
@@ -107,8 +112,9 @@ export default function Hud() {
         </div>
       )}
 
-      {/* Bottom-center player UI */}
-      <div className='absolute bottom-4 left-1/2 -translate-x-1/2 pointer-events-none w-[280px] scale-[0.9]'>
+      {/* Bottom-center player UI — hidden during onboarding */}
+      {!showOnboardingModal && (
+        <div className='absolute bottom-4 left-1/2 -translate-x-1/2 pointer-events-none w-[280px] scale-[0.9]'>
         <img src='/elements/panel-player.png' className='w-full h-auto top-0 left-0' />
         <img src='/elements/avatar-normal.png' className='absolute w-[130px] h-auto top-[-4px] left-[-18px]' />
         <div className='absolute top-[24px] left-0 w-full h-full pl-[120px] pr-10 flex flex-col gap-2'>
@@ -123,7 +129,8 @@ export default function Hud() {
             <span>{trippDamage}</span>
           </div>
         </div>
-      </div>
+        </div>
+      )}
     </div>
   )
 }
