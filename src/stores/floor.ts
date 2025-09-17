@@ -152,7 +152,7 @@ export const useFloorStore = create<FloorStore>((set, get) => ({
   setWinCode: (s) => set({ winCode: s }),
 
   /* ---------------- Onboarding modal defaults ---------------- */
-  showOnboardingModal: true,
+  showOnboardingModal: false,
   setShowOnboardingModal: (v) => set({ showOnboardingModal: v }),
 
   /* -------- Async attack sequence -------- */

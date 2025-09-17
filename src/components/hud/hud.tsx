@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useFloorStore } from '@/stores/floor'
 import QRCode from 'react-qr-code'
 
@@ -18,6 +19,13 @@ export default function Hud() {
     setShowWinModal,
     winCode,
   } = useFloorStore()
+
+  /* ---------------- Onboarding delay ---------------- */
+  useEffect(() => {
+    // show onboarding modal after 2 s
+    const t = setTimeout(() => setShowOnboardingModal(true), 2000)
+    return () => clearTimeout(t)
+  }, [])
 
   const slots = [0, 1, 2]
 
@@ -47,9 +55,9 @@ export default function Hud() {
 
       {/* Onboarding Modal */}
       {showOnboardingModal && (
-        <div className='fixed inset-0 bg-black/60 flex items-center justify-center pointer-events-auto z-[10000]'>
+        <div className='fixed inset-0 bg-black/60 flex items-center justify-center pointer-events-auto z-[10000] opacity-0 animate-[fade-in_300ms_ease-out_forwards]'>
           {/* Panel container to anchor the OK button */}
-          <div className='relative'>
+          <div className='relative opacity-0 animate-[slide-up-fade_400ms_ease-out_75ms_forwards]'>
             <img
               src='/elements/panel-onboarding.png'
               alt='Onboarding'
