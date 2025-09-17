@@ -74,14 +74,14 @@ export default function Hud() {
         <div className='fixed inset-0 bg-black/60 flex items-center justify-center pointer-events-auto z-[10000] opacity-0 animate-[fade-in_300ms_ease-out_forwards]'>
           {/* Panel container to anchor the OK button */}
           <div className='relative opacity-0 animate-[slide-up-fade_400ms_ease-out_75ms_forwards] p-10'>
-            <img src='/elements/panel-onboarding.png' alt='Onboarding' className='w-[540px] max-w-full h-auto' />
+            <img src='/elements/panel-onboarding.png' alt='Onboarding' className='w-[540px] max-w-full h-auto' fetchPriority='high' />
             <button
               className='absolute bottom-14 right-16 sm:right-20 sm:bottom-20'
               onClick={() => {
                 setShowOnboardingModal(false)
                 setHasOnboarded(true)
               }}>
-              <img src='/elements/element-button-ok.png' alt='OK' className='sm:w-[80px] w-[60px] h-auto' />
+              <img src='/elements/element-button-ok.png' alt='OK' className='sm:w-[80px] w-[60px] h-auto' fetchPriority='high' />
             </button>
           </div>
         </div>
@@ -104,19 +104,19 @@ export default function Hud() {
 
       {/* Attack button hidden during onboarding */}
       {showAttackButton && hasOnboarded && (
-        <div className='absolute bottom-4 right-4 pointer-events-none'>
-          <button className='pointer-events-auto px-6 py-3 rounded-md bg-red-600 text-white text-lg shadow-lg' onClick={performAttackSequence}>
-            Attack
-          </button>
+        <div className='absolute bottom-[18%] active:scale-[.8] transition-transform duration-100 left-1/2 w-[100px] h-[100px] flex justify-center items-center -translate-x-1/2 pointer-events-none'>
+          <button
+            className='pointer-events-auto w-full h-full bg-[url(/elements/element-button-attack.png)] bg-no-repeat bg-center bg-contain'
+            onClick={performAttackSequence}></button>
         </div>
       )}
 
       {/* Buy Coke button hidden during onboarding */}
       {showBuyCokeButton && hasOnboarded && (
-        <div className='absolute bottom-[5.5rem] right-4 pointer-events-none'>
-          <button className='pointer-events-auto px-6 py-3 rounded-md bg-emerald-600 text-white text-lg shadow-lg' onClick={performBuyCoke}>
-            Buy&nbsp;Coke
-          </button>
+        <div className='absolute bottom-[16%] active:scale-[.8] transition-transform duration-100 left-1/2 w-[140px] h-[100px] flex justify-center items-center -translate-x-1/2 pointer-events-none'>
+          <button
+            className='pointer-events-auto w-full h-full bg-[url(/elements/element-button-enter.png)] bg-no-repeat bg-center bg-contain'
+            onClick={performBuyCoke}></button>
         </div>
       )}
 
