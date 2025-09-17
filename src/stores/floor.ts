@@ -271,6 +271,9 @@ export const useFloorStore = create<FloorStore>((set, get) => ({
       return { trippHP: newTrippHP }
     })
 
+    // camera shake on player being hit
+    get().kickCameraShake(0.1, 160)
+
     set({
       showBossAttackFX: false,
       bossAnimation: 'idle-long',

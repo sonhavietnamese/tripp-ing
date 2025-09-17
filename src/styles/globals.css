@@ -59,3 +59,25 @@
     transform: translateY(0);
   }
 }
+
+/* ---------- Low-HP vignette pulse ---------- */
+
+.vignette-overlay {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 0, 0, 0) 40%,
+    rgba(0, 0, 0, 0.75) 85%
+  );
+}
+
+@keyframes vignette-pulse {
+  0% {
+    opacity: 0.15;
+  }
+  45% {
+    opacity: 0.55;
+  }
+  100% {
+    opacity: 0.15;
+  }
+}
