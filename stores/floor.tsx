@@ -95,6 +95,25 @@ interface FloorStore {
   showShopModal: boolean
   setShowShopModal: (v: boolean) => void
 
+  /* ---------------- Inventory modal ---------------- */
+  showInventoryModal: boolean
+  setShowInventoryModal: (v: boolean) => void
+
+  /* ---------------- Power-up modal ---------------- */
+  showPowerUpModal: boolean
+  setShowPowerUpModal: (v: boolean) => void
+
+  /* ---------------- Inventory items ---------------- */
+  inventoryItems: Array<{
+    id: string
+    name: string
+    description: React.ReactNode
+    image: string
+  }>
+  addInventoryItem: (item: { id: string; name: string; description: React.ReactNode; image: string }) => void
+  selectedInventoryItemId: string | null
+  setSelectedInventoryItemId: (id: string | null) => void
+
   /* ---------------- Camera shake -------------- */
   cameraShakeTrigger: number
   cameraShakeIntensity: number
@@ -191,6 +210,32 @@ export const useFloorStore = create<FloorStore>((set, get) => ({
   showShopModal: false,
   setShowShopModal: (v) => set({ showShopModal: v }),
 
+  /* ---------------- Inventory modal defaults ---------------- */
+  showInventoryModal: false,
+  setShowInventoryModal: (v) => set({ showInventoryModal: v }),
+
+  /* ---------------- Power-up modal defaults ---------------- */
+  showPowerUpModal: false,
+  setShowPowerUpModal: (v) => set({ showPowerUpModal: v }),
+
+  /* ---------------- Inventory items defaults ---------------- */
+  inventoryItems: [],
+  addInventoryItem: (item) =>
+    set((s) => {
+      // Don't add duplicate items
+      const exists = s.inventoryItems.some((existing) => existing.id === item.id)
+      if (exists) return s
+
+      const newItems = [...s.inventoryItems, item]
+      return {
+        inventoryItems: newItems,
+        // Auto-select the first item if none selected
+        selectedInventoryItemId: s.selectedInventoryItemId || item.id,
+      }
+    }),
+  selectedInventoryItemId: null,
+  setSelectedInventoryItemId: (id) => set({ selectedInventoryItemId: id }),
+
   /* ---------------- Camera shake defaults ---------------- */
   cameraShakeTrigger: 0,
   cameraShakeIntensity: GAME_CONFIG.agent?.cameraShake?.intensity ?? 0.12,
@@ -250,6 +295,14 @@ export const useFloorStore = create<FloorStore>((set, get) => ({
 
       // play cool emote immediately
       get().setEmote('cool')
+
+      // add chestnut to inventory
+      get().addInventoryItem({
+        id: 'chestnut',
+        name: 'Chestnut',
+        description: 'Yummy!',
+        image: '/elements/chestnut.png',
+      })
 
       // wait 2 s before showing win modal
       await new Promise((r) => setTimeout(r, 3000))
@@ -312,7 +365,28 @@ export const useFloorStore = create<FloorStore>((set, get) => ({
       get().addScore(1)
     }
 
-    // finish
+    // add QR code to inventory
+    get().addInventoryItem({
+      id: 'qr-code',
+      name: 'Voucher Unlocked!',
+      description: (
+        <span className='text-[#F0DCC3]'>
+          Here’s your exclusive QR code. Show it to redeem your free <span className='font-bold text-white'>Coca-Cola</span> sample.
+          <br />
+          <br />
+          Redeem Condition:
+          <br />- Valid for <span className='font-bold underline'>1 free sample</span>
+          <br />- Redeem at merchant store: <span className='font-bold text-white'>Calvin, Table D20.005, 20th Floor</span>
+          <br />- Present this QR code at the counter
+        </span>
+      ),
+      image: '/elements/qr.png',
+    })
+
+    // show power-up modal
+    set({ showPowerUpModal: true })
+
+    // finish (controls will be unlocked when power-up modal is closed)
     set({ controlLocked: false, showGuideCoke: false })
     get().setEmote('none')
   },

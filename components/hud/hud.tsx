@@ -2,6 +2,8 @@ import { useEffect } from 'react'
 import { useFloorStore } from '@/stores/floor'
 import QRCode from 'react-qr-code'
 import { cn } from '@/lib/utils'
+import InventoryModal from './inventory-modal'
+import PowerUpModal from './power-up-modal'
 
 export default function Hud() {
   const {
@@ -22,6 +24,8 @@ export default function Hud() {
     /* shop */
     showShopModal,
     setShowShopModal,
+    /* inventory */
+    setShowInventoryModal,
     showWinModal,
     setShowWinModal,
     winCode,
@@ -49,7 +53,7 @@ export default function Hud() {
       {hasOnboarded && (
         <aside
           id='mission-bar'
-          className='absolute select-none top-4 left-1/2 flex justify-between -translate-x-1/2 pointer-events-none md:w-[700px] w-full px-4 origin-top-left opacity-0 animate-[slide-down-fade_400ms_ease-out_50ms_forwards]'>
+          className='absolute select-none scale-[.8] origin-top-left top-4 left-1/2 flex justify-between -translate-x-1/2 pointer-events-none md:w-[700px] w-full px-4  opacity-0 animate-[slide-down-fade_400ms_ease-out_50ms_forwards]'>
           <div className='font-oc-format flex text-lg flex-col gap-1 p-4 bg-[#6A371D] border-[#B05100] border-[3px] rounded-3xl relative leading-none text-white tracking-wider'>
             <span className='text-lg'>Mission: Beat Grub</span>
             {/* dynamic mission lines */}
@@ -149,8 +153,10 @@ export default function Hud() {
 
       {/* Bottom-center player UI — hidden during onboarding */}
       {hasOnboarded && (
-        <aside className='absolute bottom-4 w-full flex justify-between items-center px-4 md:w-[700px] left-1/2 -translate-x-1/2 pointer-events-auto select-none'>
-          <div id='player-ui' className='pointer-events-none w-[280px] scale-[0.9] opacity-0 animate-[slide-up-fade_450ms_ease-out_100ms_forwards]'>
+        <aside className='absolute bottom-8 w-full flex justify-between items-center px-4 md:w-[700px] left-1/2 -translate-x-1/2 pointer-events-auto select-none'>
+          <div
+            id='player-ui'
+            className='pointer-events-none w-[280px] scale-[0.8] origin-bottom-left opacity-0 animate-[slide-up-fade_450ms_ease-out_100ms_forwards]'>
             <img src='/elements/panel-player.png' className='w-full h-auto top-0 left-0' />
             <img src='/elements/avatar-normal.png' className='absolute w-[130px] h-auto top-[-4px] left-[-18px]' />
             <div className='absolute top-[24px] left-0 w-full h-full pl-[120px] pr-10 flex flex-col gap-2'>
@@ -166,11 +172,20 @@ export default function Hud() {
               </div>
             </div>
           </div>
-          <button id='player-ui-inventory' className='h-[100px] w-[100px] animate-[slide-up-fade_450ms_ease-out_100ms_forwards] pointer-events-auto'>
+          <button
+            id='player-ui-inventory'
+            className='h-[100px] w-[100px] animate-[slide-up-fade_450ms_ease-out_100ms_forwards] pointer-events-auto scale-[.8] origin-bottom-right'
+            onClick={() => setShowInventoryModal(true)}>
             <img src='/elements/element-button-inventory.png' className='h-full w-auto' />
           </button>
         </aside>
       )}
+
+      {/* Inventory Modal */}
+      <InventoryModal />
+
+      {/* Power-up Modal */}
+      <PowerUpModal />
     </div>
   )
 }
