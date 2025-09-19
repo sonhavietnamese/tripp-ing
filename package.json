@@ -1,16 +1,12 @@
 {
-  "name": "web",
+  "name": "tripp",
+  "version": "0.1.0",
   "private": true,
-  "version": "0.0.0",
-  "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint .",
-    "preview": "vite preview",
-    "mint": "tsx scripts/mint-to.ts",
-    "mint:example": "tsx scripts/example.ts",
-    "compress:assets": "tsx script/compress-assets.ts"
+    "dev": "next dev --turbopack",
+    "build": "next build --turbopack",
+    "start": "next start",
+    "lint": "eslint"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.4",
@@ -18,13 +14,13 @@
     "@recast-navigation/three": "^0.41.0",
     "@sky-mavis/tanto-wagmi": "^0.0.11",
     "@sky-mavis/tanto-widget": "^0.0.4",
-    "@tailwindcss/vite": "^4.1.12",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "next": "15.5.3",
     "@tanstack/react-query": "^5.85.5",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "pako": "^2.1.0",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1",
     "react-qr-code": "^2.0.18",
     "tailwind-merge": "^3.3.1",
     "tailwindcss": "^4.1.12",
@@ -35,21 +31,16 @@
     "zustand": "^5.0.8"
   },
   "devDependencies": {
-    "@eslint/js": "^9.33.0",
+    "typescript": "^5",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@tailwindcss/postcss": "^4",
+    "tailwindcss": "^4",
+    "eslint": "^9",
+    "eslint-config-next": "15.5.3",
+    "@eslint/eslintrc": "^3",
     "@types/pako": "^2.0.4",
-    "@types/react": "^19.1.10",
-    "@types/react-dom": "^19.1.7",
-    "@types/three": "^0.179.0",
-    "@vitejs/plugin-react-swc": "^4.0.0",
-    "dotenv": "^16.0.0",
-    "eslint": "^9.33.0",
-    "eslint-plugin-react-hooks": "^5.2.0",
-    "eslint-plugin-react-refresh": "^0.4.20",
-    "globals": "^16.3.0",
-    "sharp": "^0.34.3",
-    "tsx": "^4.7.0",
-    "typescript": "~5.8.3",
-    "typescript-eslint": "^8.39.1",
-    "vite": "^7.1.2"
+    "@types/three": "^0.179.0"
   }
 }

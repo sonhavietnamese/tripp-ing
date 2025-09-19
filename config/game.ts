@@ -21,8 +21,8 @@ export const GAME_CONFIG = {
     emoteHeight: 2.4,
     /* default camera shake values (used when hitting the boss) */
     cameraShake: {
-      intensity: 0.12,
-      durationMs: 180,
+      intensity: 0.3,
+      durationMs: 500,
     },
   },
   bossEffects: {

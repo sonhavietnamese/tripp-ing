@@ -1,24 +1,8 @@
 @import 'tailwindcss';
 
-@font-face {
-  font-family: 'OC Format';
-  src: url('../assets/oc-format.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'CIKO';
-  src: url('../assets/ciko.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
 @theme {
-  --font-oc-format: 'OC Format', ui-sans-serif, system-ui, sans-serif;
-  --font-ciko: 'CIKO', ui-sans-serif, system-ui, sans-serif;
+  --font-oc-format: var(--font-oc-format), ui-sans-serif, system-ui, sans-serif;
+  --font-ciko: var(--font-ciko), ui-sans-serif, system-ui, sans-serif;
 }
 
 /* prevent scroll on touch devices */

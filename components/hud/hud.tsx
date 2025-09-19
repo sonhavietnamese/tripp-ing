@@ -36,10 +36,7 @@ export default function Hud() {
 
   const slots = [0, 1, 2]
   /* ---------------- Low-HP vignette ---------------- */
-  const lowHP =
-    hasOnboarded &&
-    trippHP > 0 &&
-    trippHP <= Math.max(1, Math.ceil(trippMaxHP * 0.33))
+  const lowHP = hasOnboarded && trippHP > 0 && trippHP <= Math.max(1, Math.ceil(trippMaxHP * 0.33))
 
   return (
     <div className='fixed z-[9999] pointer-events-none top-0 left-0 w-full h-full'>
@@ -72,13 +69,13 @@ export default function Hud() {
               )
             })}
           </div>
-          <ul id='score-slots' className='flex gap-1 opacity-0 animate-[slide-down-fade_400ms_ease-out_100ms_forwards]'>
+          {/* <ul id='score-slots' className='flex gap-1 opacity-0 animate-[slide-down-fade_400ms_ease-out_100ms_forwards]'>
             {slots.map((i) => (
               <li key={i} className='w-8 aspect-square'>
                 <img src={i < score ? '/elements/chestnut.png' : '/elements/chestnut-silhouette.png'} alt='Chestnut' />
               </li>
             ))}
-          </ul>
+          </ul> */}
         </aside>
       )}
 
