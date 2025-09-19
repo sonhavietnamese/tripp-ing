@@ -421,7 +421,7 @@ export const useFloorStore = create<FloorStore>((set, get) => ({
       // ensure winCode populated by fetching from API if needed
       let currentWinCode = get().winCode
       if (!currentWinCode) {
-        currentWinCode = await fetchWinCode()
+        currentWinCode = (await fetchWinCode()) as string
         if (currentWinCode) {
           set({ winCode: currentWinCode })
         } else {
