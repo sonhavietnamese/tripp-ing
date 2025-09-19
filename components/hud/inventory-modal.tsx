@@ -19,11 +19,11 @@ export default function InventoryModal() {
   return (
     <div className='fixed inset-0 bg-black/60 flex items-center justify-center pointer-events-auto z-[10000] opacity-0 animate-[fade-in_300ms_ease-out_forwards]'>
       <div className='relative opacity-0 animate-[slide-up-fade_400ms_ease-out_75ms_forwards] p-10'>
-        <img src='/elements/panel-inventory.png' alt='Inventory' className='w-[540px] max-w-full h-auto' />
+        <img src='/elements/webp/panel-inventory.webp' alt='Inventory' className='w-[540px] max-w-full h-auto' />
 
         {/* Close button at top left corner */}
         <button className='absolute top-12 right-12 z-10' onClick={() => setShowInventoryModal(false)}>
-          <img src='/elements/element-button-close.png' alt='Close' className='w-[40px] sm:w-[60px] h-auto' />
+          <img src='/elements/webp/element-button-close.webp' alt='Close' className='w-[40px] sm:w-[60px] h-auto' />
         </button>
 
         {/* Inventory details - top section */}

@@ -313,7 +313,7 @@ export const useFloorStore = create<FloorStore>((set, get) => ({
         id: 'qr-code',
         name: 'QR Code',
         description: 'A mysterious QR code found in battle',
-        image: '/elements/qr.png',
+        image: '/elements/webp/qr.webp',
       })
 
       // Reset animation states
@@ -350,7 +350,7 @@ export const useFloorStore = create<FloorStore>((set, get) => ({
         id: 'chestnut',
         name: 'Chestnut',
         description: 'Yummy!',
-        image: '/elements/chestnut.png',
+        image: '/elements/webp/chestnut.webp',
       })
 
       // Reset animation states
@@ -500,7 +500,7 @@ export const useFloorStore = create<FloorStore>((set, get) => ({
           <br />({get().winCode})
         </span>
       ),
-      image: '/elements/qr.png',
+      image: '/elements/webp/qr.webp',
     })
 
     // show power-up modal
