@@ -149,24 +149,27 @@ export default function Hud() {
 
       {/* Bottom-center player UI — hidden during onboarding */}
       {hasOnboarded && (
-        <div
-          id='player-ui'
-          className='absolute bottom-4 left-1/2 -translate-x-1/2 pointer-events-none w-[280px] scale-[0.9] opacity-0 animate-[slide-up-fade_450ms_ease-out_100ms_forwards]'>
-          <img src='/elements/panel-player.png' className='w-full h-auto top-0 left-0' />
-          <img src='/elements/avatar-normal.png' className='absolute w-[130px] h-auto top-[-4px] left-[-18px]' />
-          <div className='absolute top-[24px] left-0 w-full h-full pl-[120px] pr-10 flex flex-col gap-2'>
-            <div className='flex items-center gap-2 font-ciko text-white text-2xl w-full justify-between'>
-              <img src='/elements/element-hp.png' className='h-[30px] w-auto top-0 left-0' />
-              <span>
-                {trippHP}/{trippMaxHP}
-              </span>
-            </div>
-            <div className='flex items-center gap-2 font-ciko text-white text-2xl w-full justify-between'>
-              <img src='/elements/element-dmg.png' className='h-[32px] w-auto top-0 left-0' />
-              <span>{trippDamage}</span>
+        <aside className='absolute bottom-4 w-full flex justify-between items-center px-4 md:w-[700px] left-1/2 -translate-x-1/2 pointer-events-auto select-none'>
+          <div id='player-ui' className='pointer-events-none w-[280px] scale-[0.9] opacity-0 animate-[slide-up-fade_450ms_ease-out_100ms_forwards]'>
+            <img src='/elements/panel-player.png' className='w-full h-auto top-0 left-0' />
+            <img src='/elements/avatar-normal.png' className='absolute w-[130px] h-auto top-[-4px] left-[-18px]' />
+            <div className='absolute top-[24px] left-0 w-full h-full pl-[120px] pr-10 flex flex-col gap-2'>
+              <div className='flex items-center gap-2 font-ciko text-white text-2xl w-full justify-between'>
+                <img src='/elements/element-hp.png' className='h-[30px] w-auto top-0 left-0' />
+                <span>
+                  {trippHP}/{trippMaxHP}
+                </span>
+              </div>
+              <div className='flex items-center gap-2 font-ciko text-white text-2xl w-full justify-between'>
+                <img src='/elements/element-dmg.png' className='h-[32px] w-auto top-0 left-0' />
+                <span>{trippDamage}</span>
+              </div>
             </div>
           </div>
-        </div>
+          <button id='player-ui-inventory' className='h-[100px] w-[100px] animate-[slide-up-fade_450ms_ease-out_100ms_forwards] pointer-events-auto'>
+            <img src='/elements/element-button-inventory.png' className='h-full w-auto' />
+          </button>
+        </aside>
       )}
     </div>
   )

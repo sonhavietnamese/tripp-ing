@@ -10,6 +10,10 @@
   overscroll-behavior: none;
 }
 
+button:active {
+  scale: 0.9;
+}
+
 /* ---------- Onboarding modal animations ---------- */
 
 @keyframes fade-in {
