@@ -1,8 +1,9 @@
 import { useFloorStore } from '@/stores/floor'
 import { useEffect } from 'react'
+import QRCode from 'react-qr-code'
 
 export default function InventoryModal() {
-  const { showInventoryModal, setShowInventoryModal, inventoryItems, selectedInventoryItemId, setSelectedInventoryItemId } = useFloorStore()
+  const { showInventoryModal, setShowInventoryModal, winCode, inventoryItems, selectedInventoryItemId, setSelectedInventoryItemId } = useFloorStore()
 
   // Auto-select first item when modal opens and no item is selected
   useEffect(() => {
@@ -30,7 +31,21 @@ export default function InventoryModal() {
           <div className='w-full h-full rounded-2xl flex flex-col items-center gap-2 sm:gap-4'>
             {selectedItem && (
               <>
-                <img src={selectedItem.image} alt={selectedItem.name} className='w-[100px] sm:w-[150px] h-auto' />
+                {selectedItem.id === 'qr-code' ? (
+                  <div className='flex items-center justify-center'>
+                    <QRCode
+                      value={winCode}
+                      size={100}
+                      height={100}
+                      className='flex w-[100px] h-[100px] sm:w-[150px] sm:h-[150px] aspect-square'
+                      bgColor='#361607'
+                      fgColor='#fff'
+                    />
+                  </div>
+                ) : (
+                  <img src={selectedItem.image} alt={selectedItem.name} className='w-[100px] sm:w-[150px] h-auto' />
+                )}
+
                 <span className='text-white text-lg font-ciko mt-2 sm:text-3xl'>{selectedItem.name}</span>
                 <span className='text-white text-sm font-oc-format text-center sm:text-lg'>{selectedItem.description}</span>
               </>
@@ -57,7 +72,7 @@ export default function InventoryModal() {
               </div>
             ) : (
               <div className='flex items-center justify-center h-full'>
-                <div className='w-full h-full rounded-2xl flex items-center justify-center'>
+                <div className='w-[300px] h-full rounded-2xl flex items-center justify-center'>
                   <span className='text-gray-400 text-sm font-oc-format sm:text-lg'>No items</span>
                 </div>
               </div>

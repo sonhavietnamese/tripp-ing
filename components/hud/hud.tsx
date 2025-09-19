@@ -14,7 +14,6 @@ export default function Hud() {
     trippDamage,
     showBuyCokeButton,
     performBuyCoke,
-    score,
     /* onboarding */
     showOnboardingModal,
     setShowOnboardingModal,
@@ -29,14 +28,26 @@ export default function Hud() {
     showWinModal,
     setShowWinModal,
     winCode,
+    /* Item animation */
+    showItemAnimation,
+    itemAnimationType,
+    inventoryIconScale,
+    itemAnimationTarget,
+    /* Player management */
+    initializePlayer,
   } = useFloorStore()
+
+  /* ---------------- Player initialization ---------------- */
+  useEffect(() => {
+    initializePlayer()
+  }, [initializePlayer])
 
   /* ---------------- Onboarding delay ---------------- */
   useEffect(() => {
     // show onboarding modal after 2 s
     const t = setTimeout(() => setShowOnboardingModal(true), 2000)
     return () => clearTimeout(t)
-  }, [])
+  }, [setShowOnboardingModal])
 
   const slots = [0, 1, 2]
   /* ---------------- Low-HP vignette ---------------- */
@@ -102,7 +113,7 @@ export default function Hud() {
       )}
 
       {/* Win Modal */}
-      {showWinModal && (
+      {/* {showWinModal && (
         <div className='fixed inset-0 bg-black/60 flex items-center justify-center pointer-events-auto z-[10000]'>
           <div className='bg-white rounded-lg p-6 max-w-sm text-center shadow-xl flex flex-col items-center gap-4'>
             <h2 className='text-xl font-bold text-emerald-700'>Coke Power up!</h2>
@@ -114,7 +125,7 @@ export default function Hud() {
             </button>
           </div>
         </div>
-      )}
+      )} */}
 
       {/* Attack button hidden during onboarding */}
       {showAttackButton && hasOnboarded && (
@@ -174,7 +185,10 @@ export default function Hud() {
           </div>
           <button
             id='player-ui-inventory'
-            className='h-[100px] w-[100px] animate-[slide-up-fade_450ms_ease-out_100ms_forwards] pointer-events-auto scale-[.8] origin-bottom-right'
+            className={cn(
+              'h-[100px] w-[100px] animate-[slide-up-fade_450ms_ease-out_100ms_forwards] pointer-events-auto scale-[.8] origin-bottom-right transition-transform',
+              inventoryIconScale && 'animate-[inventory-scale-bounce_600ms_ease-out]',
+            )}
             onClick={() => setShowInventoryModal(true)}>
             <img src='/elements/element-button-inventory.png' className='h-full w-auto' />
           </button>
@@ -186,6 +200,24 @@ export default function Hud() {
 
       {/* Power-up Modal */}
       <PowerUpModal />
+
+      {/* Item Animation */}
+      {showItemAnimation && itemAnimationTarget && itemAnimationType && typeof window !== 'undefined' && (
+        <div
+          className='fixed top-1/2 left-1/2 z-[9998] pointer-events-none'
+          style={
+            {
+              '--target-x': `${itemAnimationTarget.x - window.innerWidth / 2}px`,
+              '--target-y': `${itemAnimationTarget.y - window.innerHeight / 2}px`,
+            } as React.CSSProperties
+          }>
+          <img
+            src={itemAnimationType === 'qr' ? '/elements/qr.png' : '/elements/chestnut.png'}
+            alt={itemAnimationType === 'qr' ? 'QR Code' : 'Chestnut'}
+            className='w-[80px] h-[80px] animate-[qr-curve-to-inventory_1500ms_ease-out_forwards]'
+          />
+        </div>
+      )}
     </div>
   )
 }

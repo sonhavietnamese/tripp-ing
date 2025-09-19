@@ -1,7 +1,7 @@
 import { useFloorStore } from '@/stores/floor'
 
 export default function PowerUpModal() {
-  const { showPowerUpModal, setShowPowerUpModal } = useFloorStore()
+  const { showPowerUpModal, setShowPowerUpModal, performQRAnimation } = useFloorStore()
 
   if (!showPowerUpModal) return null
 
@@ -11,7 +11,13 @@ export default function PowerUpModal() {
         <img src='/elements/panel-power-up.png' alt='Power Up' className='w-[540px] max-w-full h-auto' />
 
         {/* Back to Battle button */}
-        <button className='absolute bottom-14 left-1/2 -translate-x-1/2 sm:bottom-20' onClick={() => setShowPowerUpModal(false)}>
+        <button 
+          className='absolute bottom-14 left-1/2 -translate-x-1/2 sm:bottom-20' 
+          onClick={() => {
+            setShowPowerUpModal(false)
+            performQRAnimation()
+          }}
+        >
           <img src='/elements/element-button-back-to-battle.png' alt='Back to Battle' className='w-[200px] sm:w-[220px] h-auto' />
         </button>
       </div>

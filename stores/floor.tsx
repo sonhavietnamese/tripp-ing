@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import * as THREE from 'three'
 import { GAME_CONFIG } from '@/config/game'
+import { getOrCreatePlayerUUID, fetchWinCode } from '@/lib/player-utils'
 
 interface FloorStore {
   target: THREE.Vector3
@@ -75,6 +76,11 @@ interface FloorStore {
   setShowWinModal: (v: boolean) => void
   winCode: string
   setWinCode: (s: string) => void
+
+  /* ---------------- Player UUID & Win Code Management ---------------- */
+  playerUUID: string
+  setPlayerUUID: (uuid: string) => void
+  initializePlayer: () => Promise<void>
   /* ---------------- Onboarding modal ---------------- */
   showOnboardingModal: boolean
   setShowOnboardingModal: (v: boolean) => void
@@ -113,6 +119,18 @@ interface FloorStore {
   addInventoryItem: (item: { id: string; name: string; description: React.ReactNode; image: string }) => void
   selectedInventoryItemId: string | null
   setSelectedInventoryItemId: (id: string | null) => void
+
+  /* ---------------- Item Animation -------------- */
+  showItemAnimation: boolean
+  setShowItemAnimation: (v: boolean) => void
+  itemAnimationType: 'qr' | 'chestnut' | null
+  setItemAnimationType: (type: 'qr' | 'chestnut' | null) => void
+  inventoryIconScale: boolean
+  setInventoryIconScale: (v: boolean) => void
+  itemAnimationTarget: { x: number; y: number } | null
+  setItemAnimationTarget: (target: { x: number; y: number } | null) => void
+  performQRAnimation: () => Promise<void>
+  performChestnutAnimation: () => Promise<void>
 
   /* ---------------- Camera shake -------------- */
   cameraShakeTrigger: number
@@ -193,8 +211,22 @@ export const useFloorStore = create<FloorStore>((set, get) => ({
   /* ---------------- Win modal defaults ---------------- */
   showWinModal: false,
   setShowWinModal: (v) => set({ showWinModal: v }),
-  winCode: GAME_CONFIG.promo.winCode,
+  winCode: '',
   setWinCode: (s) => set({ winCode: s }),
+
+  /* ---------------- Player UUID & Win Code Management defaults ---------------- */
+  playerUUID: '',
+  setPlayerUUID: (uuid) => set({ playerUUID: uuid }),
+  initializePlayer: async () => {
+    const uuid = getOrCreatePlayerUUID()
+    set({ playerUUID: uuid })
+
+    // Fetch win code from API/localStorage
+    const winCode = await fetchWinCode()
+    if (winCode) {
+      set({ winCode })
+    }
+  },
 
   /* ---------------- Onboarding modal defaults ---------------- */
   showOnboardingModal: false,
@@ -236,6 +268,16 @@ export const useFloorStore = create<FloorStore>((set, get) => ({
   selectedInventoryItemId: null,
   setSelectedInventoryItemId: (id) => set({ selectedInventoryItemId: id }),
 
+  /* ---------------- Item Animation defaults ---------------- */
+  showItemAnimation: false,
+  setShowItemAnimation: (v) => set({ showItemAnimation: v }),
+  itemAnimationType: null,
+  setItemAnimationType: (type) => set({ itemAnimationType: type }),
+  inventoryIconScale: false,
+  setInventoryIconScale: (v) => set({ inventoryIconScale: v }),
+  itemAnimationTarget: null,
+  setItemAnimationTarget: (target) => set({ itemAnimationTarget: target }),
+
   /* ---------------- Camera shake defaults ---------------- */
   cameraShakeTrigger: 0,
   cameraShakeIntensity: GAME_CONFIG.agent?.cameraShake?.intensity ?? 0.12,
@@ -246,6 +288,80 @@ export const useFloorStore = create<FloorStore>((set, get) => ({
       cameraShakeIntensity: intensity ?? s.cameraShakeIntensity,
       cameraShakeDurationMs: durationMs ?? s.cameraShakeDurationMs,
     })),
+
+  /* QR Animation sequence */
+  performQRAnimation: async () => {
+    const { setShowItemAnimation, setItemAnimationType, setInventoryIconScale, addInventoryItem, setItemAnimationTarget } = get()
+
+    // Calculate inventory icon position
+    const inventoryIcon = document.getElementById('player-ui-inventory')
+    if (inventoryIcon) {
+      const rect = inventoryIcon.getBoundingClientRect()
+      const centerX = rect.left + rect.width / 2
+      const centerY = rect.top + rect.height / 2
+      setItemAnimationTarget({ x: centerX, y: centerY })
+    }
+
+    // Start QR animation
+    setItemAnimationType('qr')
+    setShowItemAnimation(true)
+
+    // After animation completes (1.5s), trigger inventory icon scale and add QR to inventory
+    setTimeout(() => {
+      setInventoryIconScale(true)
+      addInventoryItem({
+        id: 'qr-code',
+        name: 'QR Code',
+        description: 'A mysterious QR code found in battle',
+        image: '/elements/qr.png',
+      })
+
+      // Reset animation states
+      setTimeout(() => {
+        setShowItemAnimation(false)
+        setItemAnimationType(null)
+        setInventoryIconScale(false)
+        setItemAnimationTarget(null)
+      }, 600) // Scale animation duration
+    }, 1500) // Curved animation duration
+  },
+
+  /* Chestnut Animation sequence */
+  performChestnutAnimation: async () => {
+    const { setShowItemAnimation, setItemAnimationType, setInventoryIconScale, addInventoryItem, setItemAnimationTarget } = get()
+
+    // Calculate inventory icon position
+    const inventoryIcon = document.getElementById('player-ui-inventory')
+    if (inventoryIcon) {
+      const rect = inventoryIcon.getBoundingClientRect()
+      const centerX = rect.left + rect.width / 2
+      const centerY = rect.top + rect.height / 2
+      setItemAnimationTarget({ x: centerX, y: centerY })
+    }
+
+    // Start chestnut animation
+    setItemAnimationType('chestnut')
+    setShowItemAnimation(true)
+
+    // After animation completes (1.5s), trigger inventory icon scale and add chestnut to inventory
+    setTimeout(() => {
+      setInventoryIconScale(true)
+      addInventoryItem({
+        id: 'chestnut',
+        name: 'Chestnut',
+        description: 'Yummy!',
+        image: '/elements/chestnut.png',
+      })
+
+      // Reset animation states
+      setTimeout(() => {
+        setShowItemAnimation(false)
+        setItemAnimationType(null)
+        setInventoryIconScale(false)
+        setItemAnimationTarget(null)
+      }, 600) // Scale animation duration
+    }, 1500) // Curved animation duration
+  },
 
   /* -------- Async attack sequence -------- */
   performAttackSequence: async () => {
@@ -296,20 +412,23 @@ export const useFloorStore = create<FloorStore>((set, get) => ({
       // play cool emote immediately
       get().setEmote('cool')
 
-      // add chestnut to inventory
-      get().addInventoryItem({
-        id: 'chestnut',
-        name: 'Chestnut',
-        description: 'Yummy!',
-        image: '/elements/chestnut.png',
-      })
+      // animate chestnut to inventory
+      get().performChestnutAnimation()
 
       // wait 2 s before showing win modal
       await new Promise((r) => setTimeout(r, 3000))
 
-      // ensure winCode populated (in case it was cleared) then show modal
-      if (!get().winCode) {
-        set({ winCode: GAME_CONFIG.promo.winCode })
+      // ensure winCode populated by fetching from API if needed
+      let currentWinCode = get().winCode
+      if (!currentWinCode) {
+        currentWinCode = await fetchWinCode()
+        if (currentWinCode) {
+          set({ winCode: currentWinCode })
+        } else {
+          // Fallback to default config code if API fails
+          currentWinCode = GAME_CONFIG.promo.winCode
+          set({ winCode: currentWinCode })
+        }
       }
       set({ showWinModal: true })
       return
@@ -378,6 +497,7 @@ export const useFloorStore = create<FloorStore>((set, get) => ({
           <br />- Valid for <span className='font-bold underline'>1 free sample</span>
           <br />- Redeem at merchant store: <span className='font-bold text-white'>Calvin, Table D20.005, 20th Floor</span>
           <br />- Present this QR code at the counter
+          <br />({get().winCode})
         </span>
       ),
       image: '/elements/qr.png',
