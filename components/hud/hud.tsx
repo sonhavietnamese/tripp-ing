@@ -3,6 +3,17 @@ import { useFloorStore } from '@/stores/floor'
 import { useEffect } from 'react'
 import InventoryModal from './inventory-modal'
 import PowerUpModal from './power-up-modal'
+import panelOnboarding from '@/assets/elements/webp/panel-onboarding.webp'
+import elementButtonOk from '@/assets/elements/webp/element-button-ok.webp'
+import panelShop from '@/assets/elements/webp/panel-shop.webp'
+import elementButtonBuy from '@/assets/elements/webp/element-button-buy.webp'
+import panelPlayer from '@/assets/elements/webp/panel-player.webp'
+import avatarNormal from '@/assets/elements/webp/avatar-normal.webp'
+import elementHp from '@/assets/elements/webp/element-hp.webp'
+import elementDmg from '@/assets/elements/webp/element-dmg.webp'
+import elementButtonInventory from '@/assets/elements/webp/element-button-inventory.webp'
+import qr from '@/assets/elements/webp/qr.webp'
+import chestnut from '@/assets/elements/webp/chestnut.webp'
 
 export default function Hud() {
   const {
@@ -94,14 +105,14 @@ export default function Hud() {
         <div className='fixed inset-0 bg-black/60 flex items-center justify-center pointer-events-auto z-[10000] opacity-0 animate-[fade-in_300ms_ease-out_forwards]'>
           {/* Panel container to anchor the OK button */}
           <div className='relative opacity-0 animate-[slide-up-fade_400ms_ease-out_75ms_forwards] p-10'>
-            <img src='/elements/webp/panel-onboarding.webp' alt='Onboarding' className='w-[540px] max-w-full h-auto' fetchPriority='high' />
+            <img src={panelOnboarding.src} alt='Onboarding' className='w-[540px] max-w-full h-auto' fetchPriority='high' />
             <button
               className='absolute bottom-14 right-16 sm:right-20 sm:bottom-20'
               onClick={() => {
                 setShowOnboardingModal(false)
                 setHasOnboarded(true)
               }}>
-              <img src='/elements/webp/element-button-ok.webp' alt='OK' className='sm:w-[80px] w-[60px] h-auto' fetchPriority='high' />
+              <img src={elementButtonOk.src} alt='OK' className='sm:w-[80px] w-[60px] h-auto' fetchPriority='high' />
             </button>
           </div>
         </div>
@@ -126,7 +137,7 @@ export default function Hud() {
       {showAttackButton && hasOnboarded && (
         <div className='absolute bottom-[18%] active:scale-[.8] transition-transform duration-100 left-1/2 w-[100px] h-[100px] flex justify-center items-center -translate-x-1/2 pointer-events-none'>
           <button
-            className='pointer-events-auto w-full h-full bg-[url(/elements/element-button-attack.png)] bg-no-repeat bg-center bg-contain'
+            className='pointer-events-auto w-full h-full bg-[url(/elements/webp/element-button-attack.webp)] bg-no-repeat bg-center bg-contain'
             onClick={performAttackSequence}></button>
         </div>
       )}
@@ -144,14 +155,14 @@ export default function Hud() {
       {showShopModal && (
         <div className='fixed inset-0 bg-black/60 flex items-center justify-center pointer-events-auto z-[10000] opacity-0 animate-[fade-in_300ms_ease-out_forwards]'>
           <div className='relative opacity-0 animate-[slide-up-fade_400ms_ease-out_75ms_forwards] p-10'>
-            <img src='/elements/webp/panel-shop.webp' alt='Shop' className='w-[540px] max-w-full h-auto' />
+            <img src={panelShop.src} alt='Shop' className='w-[540px] max-w-full h-auto' />
             <button
               className='absolute bottom-14 right-16 sm:right-20 sm:bottom-20'
               onClick={() => {
                 setShowShopModal(false)
                 performBuyCoke()
               }}>
-              <img src='/elements/webp/element-button-buy.webp' alt='Buy' className='sm:w-[80px] w-[60px] h-auto' />
+              <img src={elementButtonBuy.src} alt='Buy' className='sm:w-[80px] w-[60px] h-auto' />
             </button>
           </div>
         </div>
@@ -163,17 +174,17 @@ export default function Hud() {
           <div
             id='player-ui'
             className='pointer-events-none w-[280px] scale-[0.8] origin-bottom-left opacity-0 animate-[slide-up-fade_450ms_ease-out_100ms_forwards]'>
-            <img src='/elements/webp/panel-player.webp' className='w-full h-auto top-0 left-0' />
-            <img src='/elements/webp/avatar-normal.webp' className='absolute w-[130px] h-auto top-[-4px] left-[-18px]' />
+            <img src={panelPlayer.src} className='w-full h-auto top-0 left-0' />
+            <img src={avatarNormal.src} className='absolute w-[130px] h-auto top-[-4px] left-[-18px]' />
             <div className='absolute top-[24px] left-0 w-full h-full pl-[120px] pr-10 flex flex-col gap-2'>
               <div className='flex items-center gap-2 font-ciko text-white text-2xl w-full justify-between'>
-                <img src='/elements/webp/element-hp.webp' className='h-[30px] w-auto top-0 left-0' />
+                <img src={elementHp.src} className='h-[30px] w-auto top-0 left-0' />
                 <span>
                   {trippHP}/{trippMaxHP}
                 </span>
               </div>
               <div className='flex items-center gap-2 font-ciko text-white text-2xl w-full justify-between'>
-                <img src='/elements/webp/element-dmg.webp' className='h-[32px] w-auto top-0 left-0' />
+                <img src={elementDmg.src} className='h-[32px] w-auto top-0 left-0' />
                 <span>{trippDamage}</span>
               </div>
             </div>
@@ -185,7 +196,7 @@ export default function Hud() {
               inventoryIconScale && 'animate-[inventory-scale-bounce_600ms_ease-out]',
             )}
             onClick={() => setShowInventoryModal(true)}>
-            <img src='/elements/webp/element-button-inventory.webp' className='h-full w-auto' />
+            <img src={elementButtonInventory.src} className='h-full w-auto' />
           </button>
         </aside>
       )}
@@ -207,7 +218,7 @@ export default function Hud() {
             } as React.CSSProperties
           }>
           <img
-            src={itemAnimationType === 'qr' ? '/elements/webp/qr.webp' : '/elements/webp/chestnut.webp'}
+            src={itemAnimationType === 'qr' ? qr.src : chestnut.src}
             alt={itemAnimationType === 'qr' ? 'QR Code' : 'Chestnut'}
             className='w-[80px] h-[80px] animate-[qr-curve-to-inventory_1500ms_ease-out_forwards]'
           />
