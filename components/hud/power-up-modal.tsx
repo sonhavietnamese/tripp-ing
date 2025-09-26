@@ -1,4 +1,5 @@
 import { useFloorStore } from '@/stores/floor'
+import { trackButtonClick } from '@/lib/button-tracking'
 
 export default function PowerUpModal() {
   const { showPowerUpModal, setShowPowerUpModal, performQRAnimation } = useFloorStore()
@@ -14,6 +15,10 @@ export default function PowerUpModal() {
         <button
           className='absolute bottom-14 left-1/2 -translate-x-1/2 sm:bottom-20'
           onClick={() => {
+            trackButtonClick({
+              buttonName: 'power_up_back_to_battle',
+              section: 'power_up_modal'
+            })
             setShowPowerUpModal(false)
             performQRAnimation()
           }}>

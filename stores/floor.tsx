@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import * as THREE from 'three'
 import { GAME_CONFIG } from '@/config/game'
 import { getOrCreatePlayerUUID, fetchWinCode } from '@/lib/player-utils'
+import posthog from 'posthog-js'
 
 interface FloorStore {
   target: THREE.Vector3

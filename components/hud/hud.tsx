@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils'
 import { useFloorStore } from '@/stores/floor'
 import { useEffect } from 'react'
+import { trackButtonClick } from '@/lib/button-tracking'
 import InventoryModal from './inventory-modal'
 import PowerUpModal from './power-up-modal'
 import panelOnboarding from '@/assets/elements/webp/panel-onboarding.webp'
@@ -109,6 +110,10 @@ export default function Hud() {
             <button
               className='absolute bottom-14 right-16 sm:right-20 sm:bottom-20'
               onClick={() => {
+                trackButtonClick({
+                  buttonName: 'onboarding_ok',
+                  section: 'onboarding_modal'
+                })
                 setShowOnboardingModal(false)
                 setHasOnboarded(true)
               }}>
@@ -138,7 +143,14 @@ export default function Hud() {
         <div className='absolute bottom-[18%] active:scale-[.8] transition-transform duration-100 left-1/2 w-[100px] h-[100px] flex justify-center items-center -translate-x-1/2 pointer-events-none'>
           <button
             className='pointer-events-auto w-full h-full bg-[url(/elements/webp/element-button-attack.webp)] bg-no-repeat bg-center bg-contain'
-            onClick={performAttackSequence}></button>
+            onClick={() => {
+              trackButtonClick({
+                buttonName: 'attack',
+                section: 'game_hud',
+                metadata: { action: 'combat' }
+              })
+              performAttackSequence()
+            }}></button>
         </div>
       )}
 
@@ -147,7 +159,13 @@ export default function Hud() {
         <div className='absolute bottom-[16%] active:scale-[.8] transition-transform duration-100 left-1/2 w-[140px] h-[100px] flex justify-center items-center -translate-x-1/2 pointer-events-none'>
           <button
             className='pointer-events-auto w-full h-full bg-[url(/elements/element-button-enter.png)] bg-no-repeat bg-center bg-contain'
-            onClick={() => setShowShopModal(true)}></button>
+            onClick={() => {
+              trackButtonClick({
+                buttonName: 'enter_shop',
+                section: 'game_hud'
+              })
+              setShowShopModal(true)
+            }}></button>
         </div>
       )}
 
@@ -159,6 +177,11 @@ export default function Hud() {
             <button
               className='absolute bottom-14 right-16 sm:right-20 sm:bottom-20'
               onClick={() => {
+                trackButtonClick({
+                  buttonName: 'shop_buy',
+                  section: 'shop_modal',
+                  metadata: { item: 'coke' }
+                })
                 setShowShopModal(false)
                 performBuyCoke()
               }}>
@@ -195,7 +218,13 @@ export default function Hud() {
               'h-[100px] w-[100px] animate-[slide-up-fade_450ms_ease-out_100ms_forwards] pointer-events-auto scale-[.8] origin-bottom-right transition-transform',
               inventoryIconScale && 'animate-[inventory-scale-bounce_600ms_ease-out]',
             )}
-            onClick={() => setShowInventoryModal(true)}>
+            onClick={() => {
+              trackButtonClick({
+                buttonName: 'open_inventory',
+                section: 'game_hud'
+              })
+              setShowInventoryModal(true)
+            }}>
             <img src={elementButtonInventory.src} className='h-full w-auto' />
           </button>
         </aside>

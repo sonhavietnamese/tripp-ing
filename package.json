@@ -20,6 +20,7 @@
     "next": "15.5.3",
     "pako": "^2.1.0",
     "posthog-js": "^1.268.5",
+    "posthog-node": "^5.9.1",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-qr-code": "^2.0.18",

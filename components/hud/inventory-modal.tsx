@@ -1,6 +1,7 @@
 import { useFloorStore } from '@/stores/floor'
 import { useEffect } from 'react'
 import QRCode from 'react-qr-code'
+import { trackButtonClick } from '@/lib/button-tracking'
 
 export default function InventoryModal() {
   const { showInventoryModal, setShowInventoryModal, winCode, inventoryItems, selectedInventoryItemId, setSelectedInventoryItemId } = useFloorStore()
@@ -22,7 +23,13 @@ export default function InventoryModal() {
         <img src='/elements/webp/panel-inventory.webp' alt='Inventory' className='w-[540px] max-w-full h-auto' />
 
         {/* Close button at top left corner */}
-        <button className='absolute top-12 right-12 z-10' onClick={() => setShowInventoryModal(false)}>
+        <button className='absolute top-12 right-12 z-10' onClick={() => {
+          trackButtonClick({
+            buttonName: 'inventory_close',
+            section: 'inventory_modal'
+          })
+          setShowInventoryModal(false)
+        }}>
           <img src='/elements/webp/element-button-close.webp' alt='Close' className='w-[40px] sm:w-[60px] h-auto' />
         </button>
 
@@ -65,7 +72,14 @@ export default function InventoryModal() {
                     className={`h-full rounded-2xl p-1 transition-all aspect-square ${
                       selectedInventoryItemId === item.id ? 'bg-[#5A2D1A] ring-2 ring-yellow-400' : 'bg-[#361607] hover:bg-[#4A2012]'
                     }`}
-                    onClick={() => setSelectedInventoryItemId(item.id)}>
+                    onClick={() => {
+                      trackButtonClick({
+                        buttonName: 'inventory_item_select',
+                        section: 'inventory_modal',
+                        metadata: { item_id: item.id, item_name: item.name }
+                      })
+                      setSelectedInventoryItemId(item.id)
+                    }}>
                     <img src={item.image} alt={item.name} className='object-contain' />
                   </button>
                 ))}
